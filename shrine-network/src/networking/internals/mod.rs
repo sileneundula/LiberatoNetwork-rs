@@ -6,3 +6,6 @@ pub mod behavior;
 
 /// The Keyring
 pub mod keys;
+
+/// Implemented Commands
+pub mod commands;
