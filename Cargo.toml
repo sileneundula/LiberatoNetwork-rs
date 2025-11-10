@@ -1,0 +1,10 @@
+[workspace]
+resolver = "3"
+members = ["shrine-network"]
+
+[package]
+name = "libshrindo"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
