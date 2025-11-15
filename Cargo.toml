@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["shrine-network"]
+members = ["shrine-network", "shrine-raft"]
 
 [package]
 name = "libshrindo"
