@@ -21,6 +21,7 @@ use libp2p::identity::*;
 /// # ShrineKeys
 /// 
 /// Keypairs for usage.
+#[derive(Clone)]
 pub struct ShrineKeys {
     pub key: Keypair
 }

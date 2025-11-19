@@ -3448,6 +3448,7 @@ name = "shrine-network"
 version = "0.1.0"
 dependencies = [
  "libp2p",
+ "rand 0.8.5",
  "tokio",
 ]
 

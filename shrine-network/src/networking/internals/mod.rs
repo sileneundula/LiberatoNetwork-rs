@@ -9,3 +9,6 @@ pub mod keys;
 
 /// Implemented Commands
 pub mod commands;
+
+/// Implements different Swarms
+pub mod swarm;
