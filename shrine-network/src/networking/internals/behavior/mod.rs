@@ -28,6 +28,9 @@ use rand::rngs::OsRng;
 use crate::networking::internals::keys::ShrineKeys;
 
 
+pub mod peer_discovery;
+
+
 #[derive(NetworkBehaviour)]
 pub struct ShrineBehaviour {
     autonat_client: AutonatClient,
