@@ -4254,7 +4254,9 @@ dependencies = [
  "libp2p",
  "librustysigs",
  "rand 0.8.5",
+ "serde",
  "tokio",
+ "zeroize",
 ]
 
 [[package]]

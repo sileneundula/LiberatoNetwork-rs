@@ -1,7 +1,7 @@
 //! # Basics of Service Nodes
 //! 
 //! - [ ] Node Information
-//!     - [ ] ShulginSigning
+//!     - [X] ShulginSigning
 //!     - [ ] WOTS Signing
 //!     - [ ] * Idea like the one i made for decentralized databases using ZKPs
 //! 
@@ -9,15 +9,26 @@
 
 use std::collections::HashMap;
 
+use librustysigs::RustySignature;
+use librustysigs::RustySignaturesUsage;
+use serde::{Serialize,Deserialize};
+use zeroize::{Zeroize,ZeroizeOnDrop};
+
+
 use crate::core::crx::UserCertificate;
 use crate::core::crx::UserCertificatePriv;
 
 
+#[derive(Clone,Serialize,Deserialize,Zeroize,ZeroizeOnDrop)]
+/// # NodeInformation
+/// 
+/// ID and `UserCertificate`
 pub struct NodeInformation {
     id: u64,
     certificate: UserCertificate,
 }
 
+#[derive(Clone,Serialize,Deserialize,Zeroize,ZeroizeOnDrop)]
 /// # NodeInformation (Node's Certificate and Info)
 pub struct NodePrivateInfo {
     id: u64,
@@ -50,11 +61,42 @@ impl NodePrivateInfo {
         let x = self.certificate.publiccert();
         return x.export().unwrap()
     }
+    /// # ED25519
+    /// 
+    /// Hexadecimal
+    pub fn ed25519_public_key(&self) -> String {
+        self.certificate.cert.clkey.to_hex_string()
+    }
+    /// # SPHINCS+
+    /// 
+    /// Base58
+    pub fn sphincs_public_key(&self) -> String {
+        self.certificate.cert.pqkey.to_base58_string()
+    }
+    /// # Public Keys
+    pub fn public_keys(&self) -> (String,String) {
+        let clkey = self.certificate.cert.clkey.to_hex_string();
+        let pqkey = self.certificate.cert.pqkey.to_base58_string();
+
+        return (clkey,pqkey)
+    }
+    pub fn public_key(&self) -> String {
+        let mut pk_str = String::new();
+        let pk = self.public_keys();
+
+        pk_str.push_str(&pk.0);
+        pk_str.push_str(":");
+        pk_str.push_str(&pk.1);
+
+        return pk_str
+    }
 }
 
 #[test]
 fn run() {
     let node_slab = NodePrivateInfo::generate(0, 0);
+    let pk = node_slab.public_key();
+    println!("Public Key: {}",pk);
     println!("{}",node_slab.pretty_print())
 
 }
