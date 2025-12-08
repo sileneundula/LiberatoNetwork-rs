@@ -1,7 +1,8 @@
 //! # Basics of Service Nodes
 //! 
 //! - [ ] Node Information
-//!     - [X] ShulginSigning
+//!     - [X] ShulginSigning (SPHINCS+ and ED25519 with hedged signature)
+//!     - [ ] ED25519 (with hedged signature)
 //!     - [ ] WOTS Signing
 //!     - [ ] * Idea like the one i made for decentralized databases using ZKPs
 //! 
@@ -36,11 +37,16 @@ pub struct NodePrivateInfo {
     certificate: UserCertificatePriv,
 }
 
+/// # ShrineDomain
+/// 
+/// Domain Space
 pub struct ShrineDomain {
     tld: String,
     name: String,
     
     subdomains: Option<Vec<String>>,
+
+    pivot: String,
 }
 
 pub struct ServiceAssignedDatabase {
