@@ -22,3 +22,5 @@ tracing = "0.1.43"
 
 # Errors
 thiserror = "2.0.17"
+
+uuid = "1.19.0"

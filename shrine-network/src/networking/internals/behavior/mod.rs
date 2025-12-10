@@ -40,7 +40,6 @@ pub struct ShrineBehaviour {
     pub identify: IdentifyBehaviour,
     pub floodsub: FloodsubBehaviour,
     pub kademlia: KademliaBehaviour<MemoryStore>,
-    pub mdns: MdnsBehaviour<>
     pub relay_server: RelayServer,
     //request_response: RequestResponseBehaviour<FileExchangeCodec>,
 }

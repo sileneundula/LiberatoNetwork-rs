@@ -1,3 +1,4 @@
+use libp2p::futures::StreamExt;
 use log::{warn,info, trace, debug};
 use log::error;
 use pretty_env_logger;
@@ -7,6 +8,8 @@ use crate::networking::internals::swarm::ShrineSwarm;
 use libp2p::kad::record::store::MemoryStore;
 
 use libp2p::floodsub::Topic;
+
+use libp2p::swarm::SwarmEvent;
 
 pub mod bootstrap;
 
@@ -26,19 +29,29 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Key Generation
     let key = crate::networking::internals::keys::ShrineKeys::generate_ed25519();
     let local_peer_id = key.key.public().to_peer_id();
-    info!("Peer-ID: {}", peer_id);
+    info!("Peer-ID: {}", local_peer_id);
 
+    // Swarm
     let mut swarm: libp2p::Swarm<crate::networking::internals::behavior::ShrineBehaviour> = ShrineSwarm::new(key);
-    info!("Swarm Creation ID: {}", swarm_creation );
+    info!("Swarm Creation ID: {}", swarm_creation);
 
     // Store + Kademelia
     let store = MemoryStore::new(local_peer_id);
-    let kademlia = Kademlia::new(local_peer_id, store);
     
     
     // Behaviour
     swarm.behaviour_mut().floodsub.subscribe(Topic::new(SHRINDO_TOPIC));
     swarm.behaviour_mut().floodsub.subscribe(Topic::new(SHRINDO_TOPIC_BOOTSTRAP));
+
+    loop {
+        let event = swarm.select_next_some().await;
+
+        match event {
+            SwarmEvent::Behaviour(libp2p::kad::Event::OutboundQueryProgressed { id, result, stats, step } {
+                
+            })
+        }
+    }
 
     Ok(())
 
