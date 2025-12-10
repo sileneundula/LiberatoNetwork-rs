@@ -19,6 +19,7 @@ use libp2p::relay::client::Behaviour as RelayClient;
 use libp2p::relay::Behaviour as RelayServer;
 use libp2p::relay::Config as RelayServerConfig;
 use libp2p::swarm::NetworkBehaviour;
+use libp2p::mdns::Behaviour as MdnsBehaviour;
 
 use libp2p::floodsub::Behaviour as FloodsubBehaviour;
 use libp2p::floodsub::Config as FloodsubConfig;
@@ -33,13 +34,14 @@ pub mod peer_discovery;
 
 #[derive(NetworkBehaviour)]
 pub struct ShrineBehaviour {
-    autonat_client: AutonatClient,
-    autonat_server: AutonatServer,
-    gossipsub: GossipSubBehaviour,
-    identify: IdentifyBehaviour,
-    floodsub: FloodsubBehaviour,
-    kademlia: KademliaBehaviour<MemoryStore>,
-    relay_server: RelayServer,
+    pub autonat_client: AutonatClient,
+    pub autonat_server: AutonatServer,
+    pub gossipsub: GossipSubBehaviour,
+    pub identify: IdentifyBehaviour,
+    pub floodsub: FloodsubBehaviour,
+    pub kademlia: KademliaBehaviour<MemoryStore>,
+    pub mdns: MdnsBehaviour<>
+    pub relay_server: RelayServer,
     //request_response: RequestResponseBehaviour<FileExchangeCodec>,
 }
 
