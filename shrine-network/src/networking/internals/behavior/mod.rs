@@ -36,7 +36,7 @@ pub mod peer_discovery;
 pub struct ShrineBehaviour {
     pub autonat_client: AutonatClient,
     pub autonat_server: AutonatServer,
-    pub gossipsub: GossipSubBehaviour,
+    //pub gossipsub: GossipSubBehaviour,
     pub identify: IdentifyBehaviour,
     pub floodsub: FloodsubBehaviour,
     pub kademlia: KademliaBehaviour<MemoryStore>,
@@ -58,7 +58,7 @@ impl ShrineBehaviour {
             // GOSSIP, FLOOD, IDENTIFY, KAD
             // TODO: Check unwrap for unexpected errors
             // 11/18-11/19: Cloudflare unwrap error (historical)
-            gossipsub: GossipSubBehaviour::new(MessageAuthenticity::Anonymous, GossipSubConfig::default()).unwrap(),
+                //gossipsub: GossipSubBehaviour::new(MessageAuthenticity::Anonymous, GossipSubConfig::default()).expect("Failed"),
             identify: IdentifyBehaviour::new(IdentifyConfig::new(String::from("Shrindo-Identify"), key.key.public())),
             floodsub: FloodsubBehaviour::new(key.key.public().to_peer_id()),
             kademlia: KademliaBehaviour::new(key.key.public().to_peer_id(),MemoryStore::new(key.key.public().to_peer_id())), // Create a Memory Store Service For Gathering Peers

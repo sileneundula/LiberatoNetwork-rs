@@ -24,3 +24,9 @@ tracing = "0.1.43"
 thiserror = "2.0.17"
 
 uuid = "1.19.0"
+
+blake2-rfc = "0.2.18"
+
+slugencode = "0.1.0"
+
+dotenvy = "0.15.7"
