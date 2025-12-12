@@ -2,6 +2,8 @@ use libp2p::PeerId;
 use blake2_rfc::blake2s::Blake2s;
 use slugencode::{SlugEncodingUsage, errors::SlugEncodingError};
 
+pub mod labels;
+
 pub struct Utils;
 
 impl Utils {

@@ -1,0 +1,1 @@
+pub const ICD_PROTOCOL_NAME: &str = "ICD-PROTOCOL";
