@@ -1,6 +1,12 @@
 pub struct Source {
+    /// The registered source ID and checksum
     pub registered_id: u64,
+    pub registered_checksum: String,
+
+    // Source
     pub git_repo: String,
+
+    // Labels
     pub labels: Vec<String>,
 }
 

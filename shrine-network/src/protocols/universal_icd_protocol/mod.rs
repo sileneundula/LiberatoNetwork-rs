@@ -11,7 +11,12 @@ use async_trait::async_trait;
 use futures::{io, AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt};
 use libp2p::{request_response, StreamProtocol};
 
+/// Source and Bridge definitions
 pub mod source;
+pub mod reg;
+
+/// Implemented Attributes for Universal ICD Protocol & Labels
+pub mod attributes;
 
 
 use libp2p::request_response::{

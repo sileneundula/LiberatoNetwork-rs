@@ -4462,6 +4462,7 @@ name = "shrine-network"
 version = "0.1.0"
 dependencies = [
  "async-std",
+ "async-trait",
  "blake2-rfc",
  "dotenvy",
  "futures",
