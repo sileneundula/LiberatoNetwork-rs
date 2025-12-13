@@ -18,6 +18,9 @@ pub mod reg;
 /// Implemented Attributes for Universal ICD Protocol & Labels
 pub mod attributes;
 
+/// Core Implementations for Universal ICD Protocol
+pub mod core;
+
 
 use libp2p::request_response::{
     ProtocolSupport, Codec as RRCodec, Config,

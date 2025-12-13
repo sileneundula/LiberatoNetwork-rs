@@ -38,3 +38,9 @@ futures = "0.3.28"
 async-std = { version = "1.12.0", features = ["attributes"] }
 
 async-trait = "0.1.68"
+
+# gRPC
+tonic = "0.14.2"
+
+# Domain
+domain = "0.11.1"
