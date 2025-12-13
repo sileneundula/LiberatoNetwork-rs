@@ -12,6 +12,7 @@ pub struct ProtocolName(pub String);
 pub enum PEERTRUST_REQUEST {
     BOOTSTRAP,
     ASSIGN,
+
 }
 
 pub struct PeerTrustBootstrapRequest {

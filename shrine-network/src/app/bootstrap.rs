@@ -26,6 +26,7 @@ impl BootstrapAddressesModular {
         }
     }
     pub fn add(&mut self, peer_id: PeerId) {
+        debug!("[Shrine::Networking::KAD][Bootstrap] Adding Peer ID to Bootstrap Addresses");
         self.addresses.push(peer_id)
     }
     pub fn remove(&mut self, peer_id: PeerId) -> Result<(),NetworkingStackErrors> {
