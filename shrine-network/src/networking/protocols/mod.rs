@@ -11,7 +11,6 @@ use std::{collections::VecDeque, io};
 
 pub mod _0x00_assignment_protocol;
 pub mod _0x01_icd_modular_protocol;
-pub mod authority_protocol;
 
 
 

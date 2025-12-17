@@ -4,6 +4,19 @@
 //! 
 //! ## Features
 //! 
+//! - [ ] Command-Namespace
+//!     - [ ] source: u64
+//!     - [ ] source_id: str
+//!     - [ ] source_location
+//!         - [ ] _type
+//!         - [ ] id
+//!         - [ ] unique namespace
+//! 
+//! - [ ] Registering a Service
+//!     - [ ] Requires PoW
+//!     - [ ] Requires Monetary
+//!     - [ ] Requires Immutable Source
+//! 
 //! - [X] Register a Service as a Source ID and provide git for it. Uses a u64 in /ol-core/icd/sourceid/<source_id>
 //! - [X] Request files by their file ID (string)
 
@@ -27,9 +40,22 @@ use libp2p::request_response::{
 };
 
 use libp2p::request_response::cbor::codec::Codec as CborCodec;
+use librustysigs::UserCertificate;
 
 #[derive(Default, Clone)]
 pub struct Codec;
+
+pub struct RegisterServiceRequest {
+    // User Certificate
+    pub certificate: UserCertificate,
+    // Encryption Key
+    pub encryption_key: Option<()>,
+
+    pub service_common_name: String,
+    pub service_secret: String,
+
+
+}
 
 /// The request message for the file exchange protocol.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -63,6 +89,7 @@ impl request_response::Codec for Codec {
         }
 
         Ok(Request {
+            source_id: 0u64,
             file_id: String::from_utf8(vec).unwrap(),
         })
     }
@@ -88,7 +115,7 @@ impl request_response::Codec for Codec {
         &mut self,
         _: &StreamProtocol,
         io: &mut T,
-        Request { file_id }: Request,
+        Request { source_id: 0u64, file_id }: Request,
     ) -> io::Result<()>
     where
         T: AsyncWrite + Unpin + Send,

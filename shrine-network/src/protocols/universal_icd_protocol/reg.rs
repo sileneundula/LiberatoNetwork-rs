@@ -6,6 +6,10 @@
 //! 
 //! - [X] Register a Service with its Git repository and labels.
 //! - [X] Exchange User Certificates for authentication and verification.
+//! 
+//! ## TODO:
+//! 
+//! - OINTWALLET
 use librustysigs::{RustySignature, UserCertificate};
 
 

@@ -12,3 +12,5 @@ pub mod commands;
 
 /// Implements different Swarms
 pub mod swarm;
+
+pub mod other;
