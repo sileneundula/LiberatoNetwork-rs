@@ -27,6 +27,9 @@ use libp2p::mdns::Behaviour as MdnsBehaviour;
 use libp2p::floodsub::Behaviour as FloodsubBehaviour;
 use libp2p::floodsub::Config as FloodsubConfig;
 
+// Must Use
+use libp2p::gossipsub::Sha256Topic;
+
 use rand::rngs::OsRng;
 
 use crate::networking::internals::keys::ShrineKeys;
@@ -58,7 +61,7 @@ impl ShrineBehaviour {
             autonat_client: AutonatClient::new(rng, AutonatClientConfig::default()),
             autonat_server: AutonatServer::new(rng),
             // remove unwrap
-            gossipsub: GossipSubBehaviour::new(MessageAuthenticity::Signed(key.key.clone()), GossipConfigBuilder::default().build().unwrap()).unwrap(),
+            gossipsub: GossipSubBehaviour::new(MessageAuthenticity::Signed(key.key.clone()), GossipConfigBuilder::default().validation_mode(libp2p::gossipsub::ValidationMode::Strict).build().unwrap()).unwrap(),
             identify: IdentifyBehaviour::new(IdentifyConfig::new(String::from("Shrindo-Identify"), key.key.clone().public())),
             floodsub: FloodsubBehaviour::new(key.key.public().to_peer_id()),
             kademlia: KademliaBehaviour::new(key.key.public().to_peer_id(),MemoryStore::new(key.key.public().to_peer_id())), // Create a Memory Store Service For Gathering Peers

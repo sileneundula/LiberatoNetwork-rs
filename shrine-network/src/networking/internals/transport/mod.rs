@@ -42,3 +42,8 @@ fn create_secure_transport_wss(keypair: identity::Keypair) -> core::transport::B
 
     return transport
 }
+
+fn create_secure_transport_quic(keypair: identity::Keypair) -> core::transport::Boxed<(PeerId, core::muxing::StreamMuxerBox)> {
+    let auth_config = noise::Config::new(&keypair).unwrap();
+
+}
