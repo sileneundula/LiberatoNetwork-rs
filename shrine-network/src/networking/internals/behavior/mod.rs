@@ -11,6 +11,9 @@ use libp2p::identify::Config as IdentifyConfig;
 
 use libp2p::gossipsub::MessageAuthenticity;
 
+use libp2p::gossipsub::ConfigBuilder as GossipConfigBuilder;
+use libp2p::gossipsub::ConfigBuilderError as GossipConfigBuilderError;
+
 use libp2p::relay::Behaviour as RelayBehaviour;
 use libp2p::request_response::Behaviour as RequestResponseBehaviour;
 use libp2p::kad::Behaviour as KademliaBehaviour;
@@ -36,7 +39,7 @@ pub mod peer_discovery;
 pub struct ShrineBehaviour {
     pub autonat_client: AutonatClient,
     pub autonat_server: AutonatServer,
-    //pub gossipsub: GossipSubBehaviour,
+    pub gossipsub: GossipSubBehaviour,
     pub identify: IdentifyBehaviour,
     pub floodsub: FloodsubBehaviour,
     pub kademlia: KademliaBehaviour<MemoryStore>,
@@ -54,12 +57,9 @@ impl ShrineBehaviour {
         ShrineBehaviour {
             autonat_client: AutonatClient::new(rng, AutonatClientConfig::default()),
             autonat_server: AutonatServer::new(rng),
-            
-            // GOSSIP, FLOOD, IDENTIFY, KAD
-            // TODO: Check unwrap for unexpected errors
-            // 11/18-11/19: Cloudflare unwrap error (historical)
-                //gossipsub: GossipSubBehaviour::new(MessageAuthenticity::Anonymous, GossipSubConfig::default()).expect("Failed"),
-            identify: IdentifyBehaviour::new(IdentifyConfig::new(String::from("Shrindo-Identify"), key.key.public())),
+            // remove unwrap
+            gossipsub: GossipSubBehaviour::new(MessageAuthenticity::Signed(key.key.clone()), GossipConfigBuilder::default().build().unwrap()).unwrap(),
+            identify: IdentifyBehaviour::new(IdentifyConfig::new(String::from("Shrindo-Identify"), key.key.clone().public())),
             floodsub: FloodsubBehaviour::new(key.key.public().to_peer_id()),
             kademlia: KademliaBehaviour::new(key.key.public().to_peer_id(),MemoryStore::new(key.key.public().to_peer_id())), // Create a Memory Store Service For Gathering Peers
             relay_server: RelayServer::new(peer_id, RelayServerConfig::default())
