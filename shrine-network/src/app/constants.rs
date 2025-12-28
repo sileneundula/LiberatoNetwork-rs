@@ -1,0 +1,1 @@
+pub const DEFAULT_P2P: &str = "MuscarineNetwork/v1/";

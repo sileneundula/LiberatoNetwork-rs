@@ -27,6 +27,12 @@ const SHRINDO_TOPIC_BOOTSTRAP: &str = "shrindo-0x20CB-bootstrap-v1";
 const SHRINDO_TOPIC_KEYEXCHANGE: &str = "shrindo-0x20CB-keyexchange";
 const SHRINDO_TOPIC_ESSENTIALS: &str = "Lament-Essentials";
 
+/// Constants
+pub mod constants;
+
+use crate::app::constants::DEFAULT_P2P;
+use crate::networking::internals::behavior::topic::PeyoteTopic;
+
 const local_address: &str = "/ip4/127.0.0.1/tcp/9076";
 
 pub struct ShrindoApp;
@@ -61,6 +67,8 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
     info!("[Floodsub] Subscribed to {}", SHRINDO_TOPIC);
     swarm.behaviour_mut().floodsub.subscribe(Topic::new(SHRINDO_TOPIC_BOOTSTRAP));
     info!("[Floodsub] Subscribed to {}", SHRINDO_TOPIC_BOOTSTRAP);
+
+    swarm.behaviour_mut().gossipsub.subscribe();
 
     let id = swarm.listen_on(Multiaddr::from_str(local_address).unwrap())?;
 
