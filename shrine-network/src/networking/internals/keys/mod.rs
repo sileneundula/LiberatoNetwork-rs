@@ -30,6 +30,13 @@ impl ShrineKeys {
     pub fn from(protobuf: &[u8]) -> Result<Keypair,DecodingError> {
         Keypair::from_protobuf_encoding(protobuf)
     }
+    pub fn from_into(protobuf: &[u8]) -> Result<Self,DecodingError> {
+        let x = Keypair::from_protobuf_encoding(protobuf)?;
+
+        return Ok(Self {
+            key: x,
+        })
+    }
     pub fn generate_ed25519() -> ShrineKeys {
         return Self {
             key: Keypair::generate_ed25519()
