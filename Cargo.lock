@@ -1308,6 +1308,9 @@ name = "fixedstr"
 version = "0.5.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "75a7e79cc11f1195d9e07bd11509e1d75b51e1f48ddff52f54a25815b4abbde3"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "flagset"
@@ -3253,6 +3256,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "muscarine-bootstrap"
+version = "0.1.0"
+dependencies = [
+ "fixedstr",
+ "serde",
+ "serde-big-array",
+]
+
+[[package]]
 name = "muscarine-network"
 version = "0.1.0"
 dependencies = [
@@ -3270,6 +3282,7 @@ dependencies = [
  "pretty_env_logger",
  "rand 0.8.5",
  "serde",
+ "serde-big-array",
  "serde_yaml 0.9.34+deprecated",
  "slugencode",
  "thiserror 2.0.17",

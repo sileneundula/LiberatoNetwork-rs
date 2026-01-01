@@ -13,6 +13,7 @@
 //! - [ ] `MuscarineValidators`: Validators provide proof for certain information
 
 use async_std::path;
+use fixedstr::str128;
 use libp2p::PeerId;
 use crate::errors::NetworkingStackErrors;
 use log::{debug,error};
@@ -21,6 +22,10 @@ use slugencode::SlugEncodingUsage;
 use fixedstr::str32;
 use fixedstr::str64;
 use fixedstr::str256;
+use std::str::FromStr;
+use serde::{Serialize,Deserialize};
+use serde_big_array::BigArray;
+
 
 /// # Bootstrap Addresses
 /// 
@@ -29,28 +34,86 @@ use fixedstr::str256;
 /// These addresses are used to connect to the network and bootstrap the process.
 /// 
 /// This struct is modular and can be used to bootstrap for many purposes.
-#[derive(Clone, Copy, Debug, PartialEq, PartialOrd)]
+#[derive(Clone, Copy, Debug, PartialEq, PartialOrd, Serialize, Deserialize)]
 pub struct BootstrapAddressesModular {
     checksum: str32,
-    addresses: Vec<PeerId>,
+    
+    #[serde(with = "BigArray")]
+    addresses: [str128;256],
+
+    num_of_addresses: usize,
+    
     bootstrap_usage: str64,
 }
 
-impl BootstrapAddressesModular {
-    pub fn new(bootstrap_protocol: ) -> Self {
+/// # Bootstrap Signature
+/// 
+/// ## Algorithms
+/// 
+/// - [X] ShulginSigning
+/// - [ ] ED25519
+/// - [ ] ED448
+/// - [ ] ECDSA
+/// - [ ] RSA
+#[derive(Clone, PartialEq, PartialOrd, Serialize, Deserialize)]
+pub struct BootstrapSignature {
+    checksum: str32,
+    signature: str256,
+    signature_alternative: Option<String>,
+    alg: str32,
+}
 
+/// # Bootstrap Public Key
+/// 
+/// ## Algorithms
+/// 
+/// - [X] ShulginSigning (ED25519 + SPHINCS+) encoded in Hexadecimal
+/// - [ ] ED25519
+/// - [ ] ED448
+/// - [ ] ECDSA
+/// - [ ] RSA
+#[derive(Clone, Copy, PartialEq, PartialOrd, Serialize, Deserialize)]
+pub struct BootstrapPublicKey {
+    pkh: str256,
+    alg: str32,
+}
+
+impl BootstrapAddressesModular {
+    pub fn new(bootstrap_protocol: BootstrapProtocol) -> Self {
+        match bootstrap_protocol {
+            BootstrapProtocol::InitFromDomain(v) => {
+
+            }
+            BootstrapProtocol::InitFromFile(v) => {
+
+            }
+            BootstrapProtocol::InitFromPeer(v) => {
+
+            }
+            BootstrapProtocol::InitFromPeers(v) => {
+
+            }
+            BootstrapProtocol::InitializeRequest(v) => {
+
+            }
+        }
     }
     /// Creates a New Empty Bootstrap
     pub fn new_with_no_values() -> Self {
         return Self {
             checksum: str32::new(),
-            addresses: vec![],
+            addresses: [str128::new();256],
+            num_of_addresses: 0usize,
+            
             bootstrap_usage: str64::new(),
         }
     }
+    /// # Add
+    /// 
+    /// Adds a Peer ID in the format of Base58. It is serialized as a str128.
     pub fn add(&mut self, peer_id: PeerId) {
         debug!("[Shrine::Networking::KAD][Bootstrap] Adding Peer ID to Bootstrap Addresses");
-        self.addresses.push(peer_id)
+        self.addresses.(str128::from_str(&peer_id.to_base58()).unwrap())
     }
     pub fn remove(&mut self, peer_id: PeerId) -> Result<(),NetworkingStackErrors> {
         debug!("[Shrine::Networking::KAD][Bootstrap] Removing Peer ID");
@@ -93,7 +156,7 @@ impl BootstrapAddressesModular {
         let output = checksum_output.finalize();
         let encoder = SlugEncodingUsage::new(slugencode::SlugEncodings::Base58);
         let output_to_checksum = encoder.encode(output.as_bytes()).unwrap();
-        self.checksum = output_to_checksum
+        self.checksum = str32::from_str(&output_to_checksum).unwrap()
     }
 }
 
