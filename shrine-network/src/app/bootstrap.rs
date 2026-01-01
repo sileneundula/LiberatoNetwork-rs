@@ -1,8 +1,26 @@
+//! # Bootstrapping Protocol
+//! 
+//! Bootstrapping is essential to joining the network. There are multiple methods of bootstrapping. These are known as a `BootstrapProtocol`.
+//! 
+//! The Bootstrapping Struct contains the peers needed to join the network and is checksumed to look for any differences in peers.
+//! 
+//! ## Seeding and Relaying
+//! 
+//! - [ ] `MuscarnicSeeders`: Seeders provide data that is essential to the network.
+//! 
+//! - [ ] `MuscarineRelays`: These relays provide relaying information from one to another.
+//! 
+//! - [ ] `MuscarineValidators`: Validators provide proof for certain information
+
+use async_std::path;
 use libp2p::PeerId;
 use crate::errors::NetworkingStackErrors;
 use log::{debug,error};
 use blake2_rfc::blake2s::Blake2s;
 use slugencode::SlugEncodingUsage;
+use fixedstr::str32;
+use fixedstr::str64;
+use fixedstr::str256;
 
 /// # Bootstrap Addresses
 /// 
@@ -11,18 +29,23 @@ use slugencode::SlugEncodingUsage;
 /// These addresses are used to connect to the network and bootstrap the process.
 /// 
 /// This struct is modular and can be used to bootstrap for many purposes.
+#[derive(Clone, Copy, Debug, PartialEq, PartialOrd)]
 pub struct BootstrapAddressesModular {
-    checksum: String,
+    checksum: str32,
     addresses: Vec<PeerId>,
-    bootstrap_usage: String,
+    bootstrap_usage: str64,
 }
 
 impl BootstrapAddressesModular {
-    pub fn new() -> Self {
+    pub fn new(bootstrap_protocol: ) -> Self {
+
+    }
+    /// Creates a New Empty Bootstrap
+    pub fn new_with_no_values() -> Self {
         return Self {
-            checksum: String::new(),
+            checksum: str32::new(),
             addresses: vec![],
-            bootstrap_usage: String::new(),
+            bootstrap_usage: str64::new(),
         }
     }
     pub fn add(&mut self, peer_id: PeerId) {
@@ -72,4 +95,33 @@ impl BootstrapAddressesModular {
         let output_to_checksum = encoder.encode(output.as_bytes()).unwrap();
         self.checksum = output_to_checksum
     }
+}
+
+
+/// # Bootstrap Protocol
+/// 
+/// Lists the methods of Bootstrapping Nodes For Muscarine-Network :TEMP
+/// 
+/// ## Protocols Implemented
+/// 
+/// - [ ] InitializeRequest
+/// - [ ] InitFromPeer (contains Peer ID)
+/// - [ ] InitFromPeers (contains Peer IDs)
+/// - [ ] InitFromDomain (str256 domain)
+/// - [ ] InitFromFile (str256 path)
+pub enum BootstrapProtocol {
+    InitializeRequest(u32),
+    
+    // From Peers
+    InitFromPeer(PeerId),
+    InitFromPeers(Vec<PeerId>),
+
+    // From Domain
+    InitFromDomain(str256),
+
+    // From File
+    InitFromFile(str256),
+
+    // Search
+    //SearchForPeers(str256),
 }

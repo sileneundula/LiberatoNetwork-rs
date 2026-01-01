@@ -5,7 +5,7 @@
 //! - [ ] HTTP GET Requests
 //! - [ ] Remote Procedure Calls (RPC)
 //! - [ ] Package Manager
-//! - [X] P2P Network (SHRINE)
+//! - [X] P2P Network (MUSCARINE)
 //!     - [ ] PKDNS
 //!     - [ ] PKBUCKET
 //!     - [ ] PKREPO
