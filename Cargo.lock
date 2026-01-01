@@ -3123,36 +3123,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "mescaline-network"
-version = "0.1.0"
-dependencies = [
- "async-std",
- "async-trait",
- "blake2-rfc",
- "domain",
- "dotenvy",
- "fixedstr",
- "futures",
- "libp2p",
- "librustysigs",
- "log",
- "multiaddr",
- "pretty_env_logger",
- "rand 0.8.5",
- "serde",
- "serde_yaml 0.9.34+deprecated",
- "slugencode",
- "thiserror 2.0.17",
- "tokio",
- "toml",
- "tonic",
- "tracing",
- "url",
- "uuid",
- "zeroize",
-]
-
-[[package]]
 name = "mime"
 version = "0.3.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3280,6 +3250,36 @@ dependencies = [
  "pin-project",
  "smallvec",
  "unsigned-varint 0.7.2",
+]
+
+[[package]]
+name = "muscarine-network"
+version = "0.1.0"
+dependencies = [
+ "async-std",
+ "async-trait",
+ "blake2-rfc",
+ "domain",
+ "dotenvy",
+ "fixedstr",
+ "futures",
+ "libp2p",
+ "librustysigs",
+ "log",
+ "multiaddr",
+ "pretty_env_logger",
+ "rand 0.8.5",
+ "serde",
+ "serde_yaml 0.9.34+deprecated",
+ "slugencode",
+ "thiserror 2.0.17",
+ "tokio",
+ "toml",
+ "tonic",
+ "tracing",
+ "url",
+ "uuid",
+ "zeroize",
 ]
 
 [[package]]
