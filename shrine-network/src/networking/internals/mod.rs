@@ -1,3 +1,28 @@
+/// 
+/// 
+/// ## Progress
+/// 
+/// ### Swarms
+/// 
+/// - [X] SWARMS
+///     - [X] Core Swarm (MuscarineV1)
+/// 
+/// ### Transport
+/// 
+/// - [X] Transports
+///     - [X] TCP + Noise + Yamux
+///     - [X] WSS + Noise + Yamux
+///     - [X] QUIC
+///     - [ ] ..
+/// 
+/// ### Keys
+/// 
+/// - [X] Keypairs For P2P
+///     - [X] ED25519
+///     - [X] Secp256k1
+///     - [X] ECDSA
+///     - [ ] RSA
+
 /// Transport Methods: How To Send Bytes
 pub mod transport;
 

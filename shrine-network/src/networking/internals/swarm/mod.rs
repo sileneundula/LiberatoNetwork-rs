@@ -13,14 +13,14 @@ use libp2p::swarm::Config;
 use libp2p::{PeerId, Swarm};
 use super::behavior::ShrineBehaviour;
 use libp2p::identity;
-use super::transport::ShrineTransport;
+use super::transport::MuscarineV1Transport;
 use super::keys::ShrineKeys;
 
 pub struct ShrineSwarm;
 
 impl ShrineSwarm {
     pub fn new(key: ShrineKeys) -> Swarm<ShrineBehaviour> {
-        let transport = ShrineTransport::new(key.clone().key);
+        let transport = MuscarineV1Transport::new(key.clone().key);
 
         let pk = key.clone().key.public();
         let peer_id = pk.to_peer_id();

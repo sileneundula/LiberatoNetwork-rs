@@ -7,3 +7,6 @@ edition = "2024"
 fixedstr = {version="0.5.10", features=["serde"]}
 serde = {version="1.0.0", features=["derive"]}
 serde-big-array = {version="0.5.1"}
+slugencode = "0.1.0"
+
+libp2p-identity = "0.2.13"

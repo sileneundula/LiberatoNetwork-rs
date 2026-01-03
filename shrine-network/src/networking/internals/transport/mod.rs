@@ -8,11 +8,47 @@ use libp2p::core;
 use libp2p::yamux;
 use libp2p::websocket;
 
-pub struct ShrineTransport(pub transport::Boxed<(PeerId,muxing::StreamMuxerBox)>);
+use libp2p::quic::Config as QuicConfig;
 
-impl ShrineTransport {
+/// # MuscarineV1 Transport Protocols
+/// 
+/// Includes the following protocols for transport:
+/// 
+/// - [X] TCP
+/// - [X] WebSockets-Secure (WSS)
+pub struct MuscarineV1Transport(pub transport::Boxed<(PeerId,muxing::StreamMuxerBox)>);
+
+/// # MuscarineV1 Transport (Quic)
+/// 
+/// Includes the following protocol for transport:
+/// 
+/// - [X] Quic
+pub struct MuscarineV1TransportQuic(pub libp2p::quic::GenTransport<libp2p::quic::tokio::Provider>);
+
+impl MuscarineV1TransportQuic {
+    /// # New QUIC Transport
+    /// 
+    /// Creates a new QUIC transport for MuscarineV1
+    pub fn new(keypair: identity::Keypair) -> Self {
+        let output = create_secure_transport_quic(&keypair);
+        return Self(output)
+    }
+}
+
+impl MuscarineV1Transport {
+    /// # New Secure TCP Connection
+    /// 
+    /// Creates a new secure TCP Connection using Noise
     pub fn new(keypair: identity::Keypair) -> Self {
         let transport: transport::Boxed<(PeerId, muxing::StreamMuxerBox)> = create_secure_transport_tcp(&keypair);
+
+        return Self(transport)
+    }
+    /// # New WebSockets Secure Connection (WSS)
+    /// 
+    /// Creates a new secure Websockets Secure Connection using Noise
+    pub fn new_wss(keypair: identity::Keypair) -> Self {
+        let transport: transport::Boxed<(PeerId, muxing::StreamMuxerBox)> = create_secure_transport_wss(&keypair);
 
         return Self(transport)
     }
@@ -29,7 +65,7 @@ fn create_secure_transport_tcp(keypair: &identity::Keypair) -> transport::Boxed<
     return transport
 }
 
-fn create_secure_transport_wss(keypair: identity::Keypair) -> core::transport::Boxed<(PeerId, core::muxing::StreamMuxerBox)> {
+fn create_secure_transport_wss(keypair: &identity::Keypair) -> core::transport::Boxed<(PeerId, core::muxing::StreamMuxerBox)> {
     // Noise Config
     let auth_config: noise::Config = noise::Config::new(&keypair).unwrap();
 
@@ -43,7 +79,10 @@ fn create_secure_transport_wss(keypair: identity::Keypair) -> core::transport::B
     return transport
 }
 
-fn create_secure_transport_quic(keypair: identity::Keypair) -> core::transport::Boxed<(PeerId, core::muxing::StreamMuxerBox)> {
-    let auth_config = noise::Config::new(&keypair).unwrap();
+fn create_secure_transport_quic(keypair: &identity::Keypair) -> libp2p::quic::GenTransport<libp2p::quic::tokio::Provider> {
+    //let auth_config = noise::Config::new(&keypair).unwrap();
+
+    let mut transport: libp2p::quic::GenTransport<libp2p::quic::tokio::Provider> = libp2p::quic::tokio::Transport::new(QuicConfig::new(&keypair));
+    return transport
 
 }
