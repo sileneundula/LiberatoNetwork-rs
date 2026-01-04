@@ -3302,6 +3302,7 @@ name = "muscarine-types"
 version = "0.1.0"
 dependencies = [
  "fixedstr",
+ "serde",
 ]
 
 [[package]]
