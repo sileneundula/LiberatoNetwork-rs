@@ -13,9 +13,11 @@ use libslug::slugcrypt::internals::digest::blake3::Blake3Hasher;
 use libslug::slugcrypt::internals::signature::schnorr;
 use libslug::slugcrypt::internals::signature::schnorr::SchnorrSecretKey;
 use libslug::prelude::SlugDigest;
-
+use serde::{Serialize,Deserialize};
 // Encryption
 use libslug::slugcrypt::internals::encryption::ecies::{ECIESDecrypt,ECIESEncrypt,ECPublicKey,ECSecretKey};
+
+use serde_yaml;
 
 pub struct Block {
     csprng: str128,
@@ -23,6 +25,7 @@ pub struct Block {
     signature: str256,
 }
 
+#[derive(Clone, Copy, PartialEq, PartialOrd, Hash, Debug, Serialize, Deserialize)]
 pub struct AccountHolder {
     addr: str256,
     
@@ -66,14 +69,15 @@ impl AccountHolder {
 
         let pkh: str256 = str256::from_str(&output_base58).unwrap();
 
-        let hash_output = SlugDigest::blake3(&output_base58.as_bytes()).digest();
+        let binding = SlugDigest::blake3(&output_base58.as_bytes());
+        let hash_output = binding.digest();
         let addr = str256::from_str(hash_output).unwrap();
 
         let seed_as_hashed = str256::from_str(SlugDigest::blake2b(40, secret_seed.as_ref()).digest()).unwrap();
 
-        let public_seed = str256::from_str(SlugDigest::blake3(public_seed.as_ref().as_bytes()).digest()).unwrap();
+        let public_seed_hashed = str256::from_str(SlugDigest::blake3(public_seed.as_ref().as_bytes()).digest()).unwrap();
 
-        if public_seed.len() > 256 {
+        if public_seed.as_ref().len() > 256 {
             return Err(Errors::SchnorrKeyError)
         }
 
@@ -100,7 +104,7 @@ impl AccountHolder {
             seed: seed_as_hashed,
 
             // Public Seed
-            public_seed_hashed: public_seed,
+            public_seed_hashed: public_seed_hashed,
             public_seed_preimage: public_seed_preimage,
             },
         key))
@@ -118,9 +122,11 @@ impl AccountHolder {
 
 #[test]
 fn test() {
-    schnorr::SchnorrSecretKey::generate()
+    let x = AccountHolder::generate("secretseed", "this is a test", "randomcontext");
+    println!("{}", serde_yaml::to_string(&x.unwrap().0).unwrap())
 }
 
+#[derive(Debug,Clone, Copy)]
 pub enum Errors {
     SchnorrKeyError,
 }
