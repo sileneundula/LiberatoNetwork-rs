@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = [ "libnamespace-pivot", "muscarine-bootstrap", "muscarine-types","shrine-network", "shrine-raft"]
+members = [ "libnamespace-pivot", "muscarine-auth", "muscarine-bootstrap", "muscarine-types", "muscarine-vrf-chain","shrine-network", "shrine-raft"]
 
 [package]
 name = "libshrindo"

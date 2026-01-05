@@ -3256,6 +3256,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "muscarine-auth"
+version = "0.1.0"
+dependencies = [
+ "fixedstr",
+ "securerand-rs",
+]
+
+[[package]]
 name = "muscarine-bootstrap"
 version = "0.1.0"
 dependencies = [
@@ -3303,6 +3311,15 @@ version = "0.1.0"
 dependencies = [
  "fixedstr",
  "serde",
+]
+
+[[package]]
+name = "muscarine-vrf-chain"
+version = "0.1.0"
+dependencies = [
+ "fixedstr",
+ "libslug",
+ "schnorrkel",
 ]
 
 [[package]]
