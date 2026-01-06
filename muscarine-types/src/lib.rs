@@ -6,7 +6,7 @@
 //! 
 //! ## Types
 //! 
-//! - [X] PeerAddr (The PeerAddr used to find peers
+//! - [X] PeerAddr (The PeerAddr used to find peers)
 //! 
 //! ### PeerAddr
 //! 

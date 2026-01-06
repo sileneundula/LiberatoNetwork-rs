@@ -58,7 +58,7 @@ pub mod topic;
 
 
 #[derive(NetworkBehaviour)]
-pub struct ShrineBehaviour {
+pub struct MuscarineBehaviour {
     pub autonat_client: AutonatClient,
     pub autonat_server: AutonatServer,
 
@@ -80,14 +80,14 @@ pub struct ShrineBehaviour {
     //request_response: RequestResponseBehaviour<FileExchangeCodec>,
 }
 
-impl ShrineBehaviour {
+impl MuscarineBehaviour {
     pub fn new(key: ShrineKeys) -> Self {
         let peer_id = key.key.public().to_peer_id();
         
         let rng = OsRng;
 
 
-        ShrineBehaviour {
+        MuscarineBehaviour {
             autonat_client: AutonatClient::new(rng, AutonatClientConfig::default()),
             autonat_server: AutonatServer::new(rng),
 
