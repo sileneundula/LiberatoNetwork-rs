@@ -1,0 +1,1 @@
+pub mod __0_Assignment_Protocol;

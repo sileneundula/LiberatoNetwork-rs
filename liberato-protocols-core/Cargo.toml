@@ -1,0 +1,16 @@
+[package]
+name = "liberato-protocols-core"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+libp2p = {version="0.56.0", features=["request-response"]}
+serde = {version="1.0.0", features=["derive"]}
+async-trait = "0.1.89"
+
+# Serialization
+toml = "0.9.8"
+bincode = "3.0.0"
+json = "0.12.4"
+
+fixedstr = {version="0.5.10",features=["serde"] }

@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["liberato-addressing","liberato-core-cli", "libnamespace-pivot", "muscarine-auth", "muscarine-bootstrap", "muscarine-types", "muscarine-vrf-chain","shrine-network", "shrine-raft"]
+members = ["liberato-addressing","liberato-core-cli", "liberato-protocols-core", "libnamespace-pivot", "muscarine-auth", "muscarine-bootstrap", "muscarine-fileio", "muscarine-types", "muscarine-vrf-chain","shrine-network", "shrine-raft"]
 
 [package]
 name = "libshrindo"

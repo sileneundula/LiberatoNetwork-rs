@@ -1,4 +1,4 @@
-//! # Muscarine Types
+//! # Muscarine Types | LiberatoNetwork Types
 //! 
 //! ## Description
 //! 
@@ -7,6 +7,20 @@
 //! ## Types
 //! 
 //! - [X] PeerAddr (The PeerAddr used to find peers)
+//!     - [ ] BLAKE2B(28)
+//! 
+//! ### Keys
+//! 
+//! - [ ] X59Certificate
+//!     - [ ] ED25519
+//!     - [ ] ED448
+//!     - [ ] Secp256k1
+//!     - [ ] ECDSA
+//!     - [ ] ShulginSigning (Hybrid)
+//!     - [ ] DualFalcon
+//! - [ ] Public Key
+//! - [ ] Secret Key
+//! - [ ] Keypair
 //! 
 //! ### PeerAddr
 //! 
@@ -25,6 +39,8 @@ use std::fmt::Error;
 use serde::{Serialize,Deserialize};
 
 #[no_std]
+
+pub mod prelude;
 
 pub trait Address {
     /// # Lookup Prefix (str64)
@@ -100,6 +116,8 @@ impl Default for PeerAddr {
 /// A `PeerAddrType` is the type of peer address used.
 pub struct PeerAddrType(pub u32, pub u8);
 
+pub mod keys;
+pub mod certificate;
 
 pub struct HashAddr(pub str128);
 
