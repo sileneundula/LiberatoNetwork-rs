@@ -41,15 +41,6 @@ pub struct LiberatoSchemaRegistar {
 /// - [X] Address as a str256
 /// - [X] Prefix as str64.
 /// - [X] Deriviation Method as str64
-/// 
-/// //! 54:17 No weapon formed against you shall prosper and every voice you should condemen (paraphrased)
-//! 
-//! L(ord) | dpsil :d you dont speak dumbasses using the wire ever again. you are a christian nation and we had to do this during congress 119
-//! Dextromethamphetamine vs you, desoxyn xy des3 oxycodone methadone fix
-//! 
-//! Okay police now know they threw the first stone, you guys are a christian nation
-//! 
-//! you guys are a christian nation, why would you do this???
 #[derive(Clone, Copy, Debug, Hash, PartialEq, PartialOrd)]
 pub struct LiberatoAddress {
     addr: str256,
