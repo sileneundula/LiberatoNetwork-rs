@@ -1,18 +1,60 @@
+//! # Liberato Addressing Scheme
+//! 
+//! Liberato Addressing Scheme is a modular addressing scheme for the open internet.
+//! 
+//! It addresses length of Addresses as different, interpreted versions.
+//! 
+//! The address length is around `44`. `20-64``
+//! 
+//! ## Encoding
+//! 
+//! Addresses are derived from the following formats:
+//! - [X] X59-fmt
+//! - [X] DER
+//! - [X] Bytes
+//! - [X] PEM
+
 use fixedstr::str32;
 use fixedstr::str256;
 use fixedstr::str64;
 use fixedstr::str128;
-use heapless::Vec;
+use std::collections::HashSet;
 
 pub trait AddressScheme {
 
 }
 
+pub struct LiberatoSchema {
+    id: u64,
+    schemes: HashSet<u8,str128>, // 28 - 64
+    sources: HashSet<str128,>
+}
 
+pub struct LiberatoSchemaRegistar {
+    description: str256,
+}
+
+
+/// # Liberato Address
+/// 
+/// Contains the:
+/// - [X] Address as a str256
+/// - [X] Prefix as str64.
+/// - [X] Deriviation Method as str64
+/// 
+/// //! 54:17 No weapon formed against you shall prosper and every voice you should condemen (paraphrased)
+//! 
+//! L(ord) | dpsil :d you dont speak dumbasses using the wire ever again. you are a christian nation and we had to do this during congress 119
+//! Dextromethamphetamine vs you, desoxyn xy des3 oxycodone methadone fix
+//! 
+//! Okay police now know they threw the first stone, you guys are a christian nation
+//! 
+//! you guys are a christian nation, why would you do this???
 #[derive(Clone, Copy, Debug, Hash, PartialEq, PartialOrd)]
 pub struct LiberatoAddress {
     addr: str256,
     prefix: str64,
+    deriviation_method: str64,
 }
 
 pub struct LiberatoSlab {

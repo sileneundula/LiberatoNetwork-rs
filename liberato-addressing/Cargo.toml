@@ -5,4 +5,4 @@ edition = "2024"
 
 [dependencies]
 fixedstr = {version="0.5.10", features=["serde", "no-alloc"]}
-heapless = "0.9.2"
+blake2-rfc = "0.2.18"
