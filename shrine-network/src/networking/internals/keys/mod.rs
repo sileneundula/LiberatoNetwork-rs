@@ -22,11 +22,11 @@ use libp2p::identity::*;
 /// 
 /// Keypairs for usage.
 #[derive(Clone)]
-pub struct ShrineKeys {
+pub struct P2PKeys {
     pub key: Keypair
 }
 
-impl ShrineKeys {
+impl P2PKeys {
     pub fn from(protobuf: &[u8]) -> Result<Keypair,DecodingError> {
         Keypair::from_protobuf_encoding(protobuf)
     }
@@ -37,17 +37,17 @@ impl ShrineKeys {
             key: x,
         })
     }
-    pub fn generate_ed25519() -> ShrineKeys {
+    pub fn generate_ed25519() -> P2PKeys {
         return Self {
             key: Keypair::generate_ed25519()
         }
     }
-    pub fn generate_ecdsa() -> ShrineKeys {
+    pub fn generate_ecdsa() -> P2PKeys {
         return Self {
             key: Keypair::generate_ecdsa()
         }
     }
-    pub fn generate_secp256k1() -> ShrineKeys {
+    pub fn generate_secp256k1() -> P2PKeys {
         return Self {
             key: Keypair::generate_secp256k1()
         }

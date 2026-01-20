@@ -78,6 +78,7 @@ pub struct BootstrapPublicKey {
     alg: str32,
 }
 
+/*
 impl BootstrapAddressesModular {
     pub fn new(bootstrap_protocol: BootstrapProtocol) -> Self {
         match bootstrap_protocol {
@@ -113,7 +114,7 @@ impl BootstrapAddressesModular {
     /// Adds a Peer ID in the format of Base58. It is serialized as a str128.
     pub fn add(&mut self, peer_id: PeerId) {
         debug!("[Shrine::Networking::KAD][Bootstrap] Adding Peer ID to Bootstrap Addresses");
-        self.addresses.(str128::from_str(&peer_id.to_base58()).unwrap())
+        //self.addresses = (str128::from_str(&peer_id.to_base58()).unwrap())
     }
     pub fn remove(&mut self, peer_id: PeerId) -> Result<(),NetworkingStackErrors> {
         debug!("[Shrine::Networking::KAD][Bootstrap] Removing Peer ID");
@@ -159,6 +160,7 @@ impl BootstrapAddressesModular {
         self.checksum = str32::from_str(&output_to_checksum).unwrap()
     }
 }
+*/ 
 
 
 /// # Bootstrap Protocol

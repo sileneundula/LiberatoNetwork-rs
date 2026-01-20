@@ -25,7 +25,4 @@ pub struct RegistarDomain {
 pub trait RegistarEntryLabel {
 
 }
-
-impl RegistarEntryLabel for 
-
 pub mod data_structures;

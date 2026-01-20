@@ -41,6 +41,7 @@ use libp2p::request_response::{
 
 use libp2p::request_response::cbor::codec::Codec as CborCodec;
 use librustysigs::UserCertificate;
+use serde::{Serialize,Deserialize};
 
 #[derive(Default, Clone)]
 pub struct Codec;
@@ -58,7 +59,7 @@ pub struct RegisterServiceRequest {
 }
 
 /// The request message for the file exchange protocol.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Request {
     /// Registered Source ID for the request
     pub source_id: u64,
@@ -66,11 +67,48 @@ pub struct Request {
 }
 
 /// The response message for the file exchange protocol.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Response {
     /// The contents of the file that is being sent.
     pub file_body: Vec<u8>,
 }
+
+
+
+
+
+
+
+
+
+
+
+
+//======ICD Protocol Implementation======//
+pub struct UniversalIcdProtocolHeader {
+    pub protocol_name: String,
+    pub protocol_version: String,
+    pub protocol_implementation: String,
+    pub protocol_support: ProtocolSupport,
+}
+
+pub struct UniversalIcdNodeProtocol {
+    pub header: UniversalIcdProtocolHeader,    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #[async_trait]
 impl request_response::Codec for Codec {
@@ -115,7 +153,7 @@ impl request_response::Codec for Codec {
         &mut self,
         _: &StreamProtocol,
         io: &mut T,
-        Request { source_id: 0u64, file_id }: Request,
+        Request { source_id: 0u64, file_id: String::from("test") }: Request,
     ) -> io::Result<()>
     where
         T: AsyncWrite + Unpin + Send,

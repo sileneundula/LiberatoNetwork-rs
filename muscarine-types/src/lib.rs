@@ -123,7 +123,7 @@ pub struct HashAddr(pub str128);
 
 impl HashAddr {
     pub fn new<T: AsRef<str>>(s: T) -> core::result::Result<Self,Errors> {
-        let x = str256::from_str(s.as_ref());
+        let x = str128::from_str(s.as_ref());
 
         match x {
             Ok(v) => return Ok(Self(v)),

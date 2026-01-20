@@ -4,7 +4,7 @@ use log::{warn,info, trace, debug};
 use log::error;
 use pretty_env_logger;
 use crate::networking::internals::keys;
-use crate::networking::internals::swarm::ShrineSwarm;
+use crate::networking::internals::swarm::{MuscarineSwarm};
 
 use libp2p::floodsub::Topic;
 
@@ -22,10 +22,10 @@ use dotenvy;
 pub mod bootstrap;
 
 const swarm_creation: &str = "0x22";
-const SHRINDO_TOPIC: &str = "shrindo-0x20CB-v1";
-const SHRINDO_TOPIC_BOOTSTRAP: &str = "shrindo-0x20CB-bootstrap-v1";
-const SHRINDO_TOPIC_KEYEXCHANGE: &str = "shrindo-0x20CB-keyexchange";
-const SHRINDO_TOPIC_ESSENTIALS: &str = "Lament-Essentials";
+const SHRINDO_TOPIC: &str = "Liberato-v1";
+const SHRINDO_TOPIC_BOOTSTRAP: &str = "Liberato-Bootstrap-v1";
+const SHRINDO_TOPIC_KEYEXCHANGE: &str = "Liberato-KeyExchange-v1";
+const SHRINDO_TOPIC_ESSENTIALS: &str = "Lament-Essentials"; // search for essentials
 
 /// Constants
 pub mod constants;
@@ -47,12 +47,12 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     info!("Generating Ephermal ED25519 Key...");
     // Key Generation
-    let key = crate::networking::internals::keys::ShrineKeys::generate_ed25519();
+    let key = crate::networking::internals::keys::P2PKeys::generate_ed25519();
     let local_peer_id = key.key.public().to_peer_id();
     info!("Peer-ID: {}", local_peer_id);
 
     // Swarm
-    let mut swarm: libp2p::Swarm<crate::networking::internals::behavior::ShrineBehaviour> = ShrineSwarm::new(key);
+    let mut swarm: libp2p::Swarm<crate::networking::internals::behavior::MuscarineBehaviour> = MuscarineSwarm::new(key);
     info!("Swarm Creation ID: {}", Utils::create_swarm_id(local_peer_id).unwrap());
 
     //=====BOOTSTRAP CLI=====//
@@ -63,12 +63,12 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     
     // Behaviour
-    swarm.behaviour_mut().floodsub.subscribe(Topic::new(SHRINDO_TOPIC));
-    info!("[Floodsub] Subscribed to {}", SHRINDO_TOPIC);
-    swarm.behaviour_mut().floodsub.subscribe(Topic::new(SHRINDO_TOPIC_BOOTSTRAP));
-    info!("[Floodsub] Subscribed to {}", SHRINDO_TOPIC_BOOTSTRAP);
+    //swarm.behaviour_mut().floodsub.subscribe(Topic::new(SHRINDO_TOPIC));
+    //info!("[Floodsub] Subscribed to {}", SHRINDO_TOPIC);
+    //swarm.behaviour_mut().floodsub.subscribe(Topic::new(SHRINDO_TOPIC_BOOTSTRAP));
+    //info!("[Floodsub] Subscribed to {}", SHRINDO_TOPIC_BOOTSTRAP);
 
-    swarm.behaviour_mut().gossipsub.subscribe();
+    //swarm.behaviour_mut().gossipsub.subscribe();
 
     let id = swarm.listen_on(Multiaddr::from_str(local_address).unwrap())?;
 

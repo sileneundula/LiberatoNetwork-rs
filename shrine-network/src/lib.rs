@@ -10,11 +10,14 @@
 //! 
 //! 
 //! - /ol-app/marketplace-v1/<app>/<proto>
+#[macro_use]
 
 pub mod usage;
+#[macro_use]
 pub mod networking;
 pub mod prelude;
 pub mod core;
 pub mod app;
 pub mod errors;
 pub mod protocols;
+pub mod info;

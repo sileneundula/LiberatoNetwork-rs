@@ -4,7 +4,7 @@ use fixedstr::str256;
 use std::str::FromStr;
 
 
-pub const DEFAULT_TOPIC: &str = "PeyoteNetwork";
+pub const DEFAULT_TOPIC: &str = "LiberatoEcosystemNetworkv1";
 
 /// # PeyoteTopic
 /// 
