@@ -96,6 +96,50 @@ pub struct UniversalIcdNodeProtocol {
     pub header: UniversalIcdProtocolHeader,    
 }
 
+pub struct UniversalIcdCertificate {
+    pub icd_certificate: UserCertificate,
+    pub icd_encryption_key: Option<()>,
+
+    pub icd_service_common_name: String,
+    
+}
+
+pub struct TrustNet {
+    pub trustnet_id: u64,
+    pub trustnet_name: String,
+    pub trustnet_description: String,
+}
+
+pub struct TrustNetMembership {
+    pub trustnet_id: u64,
+    pub member_id: u64,
+    pub member_certificate: UserCertificate,
+    pub member_role: String,
+
+}
+
+pub struct TrustedRoles {
+    pub universal_role_id: u64, // Unique Role ID registered on the TrustNet/Blockchain
+    
+    pub role_name: String,
+    pub role_description: String,
+    pub role_permissions: Vec<String>,
+    pub role_trust_level: u8, // 0-100
+    
+}
+
+impl TrustNet {
+    pub fn new(id: u64, name: String, description: String) -> Self {
+        Self {
+            trustnet_id: id,
+            trustnet_name: name,
+            trustnet_description: description,
+        }
+        
+    }
+
+}
+
 
 
 
