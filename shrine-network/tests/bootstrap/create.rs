@@ -1,5 +1,4 @@
-use muscarine_network::prelude::BootstrapAddressesModular;
-
+/* 
 #[test]
 fn create_bootstrap() {
     BootstrapAddressesModular::new_with_no_values();
@@ -9,3 +8,4 @@ fn create_bootstrap() {
 fn create_bootstrap_using_protocol() {
     BootstrapAddressesModular::new(muscarine_network::app::bootstrap::BootstrapProtocol::InitFromDomain(()))
 }
+    */

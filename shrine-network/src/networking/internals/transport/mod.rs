@@ -30,7 +30,7 @@ impl MuscarineV1TransportQuic {
     /// 
     /// Creates a new QUIC transport for MuscarineV1
     pub fn new(keypair: identity::Keypair) -> Self {
-        let output = create_secure_transport_quic(&keypair);
+        let output: libp2p::quic::GenTransport<libp2p::quic::tokio::Provider> = create_secure_transport_quic(&keypair);
         return Self(output)
     }
 }
@@ -85,4 +85,20 @@ fn create_secure_transport_quic(keypair: &identity::Keypair) -> libp2p::quic::Ge
     let mut transport: libp2p::quic::GenTransport<libp2p::quic::tokio::Provider> = libp2p::quic::tokio::Transport::new(QuicConfig::new(&keypair));
     return transport
 
+}
+
+fn create_secure_transport_quic_old(keypair: &identity::Keypair) -> libp2p::quic::GenTransport<libp2p::quic::tokio::Provider> {
+    /*
+    let auth_config = noise::Config::new(&keypair).unwrap();
+
+    let transport: libp2p::quic::GenTransport<libp2p::quic::tokio::Provider> = libp2p::quic::tokio::Transport::new(QuicConfig::new(&keypair))
+        .upgrade(core::upgrade::Version::V1)
+        .authenticate(auth_config)
+        .multiplex(yamux::Config::default());
+
+    return transport
+     */
+}
+fn create_secure_transport_quic_new() {
+    
 }

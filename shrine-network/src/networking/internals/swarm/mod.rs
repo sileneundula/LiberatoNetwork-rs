@@ -10,12 +10,13 @@
 //! 
 
 use libp2p::swarm::Config;
-use libp2p::{PeerId, Swarm};
+use libp2p::{PeerId, Swarm, SwarmBuilder};
 use crate::networking::internals::keys::P2PKeys;
 
 use super::behavior::MuscarineBehaviour;
 use libp2p::identity;
 use super::transport::MuscarineV1Transport;
+use super::transport::MuscarineV1TransportQuic;
 
 pub struct MuscarineSwarm;
 
