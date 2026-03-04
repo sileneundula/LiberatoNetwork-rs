@@ -70,6 +70,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     //swarm.behaviour_mut().gossipsub.subscribe();
 
+
     let id = swarm.listen_on(Multiaddr::from_str(local_address).unwrap())?;
 
     info!("[Muscarine-Network] Connecting to LiberatoNetwork3.20 with Peer-ID: {}",local_peer_id);
