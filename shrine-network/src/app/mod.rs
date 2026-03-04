@@ -72,7 +72,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let id = swarm.listen_on(Multiaddr::from_str(local_address).unwrap())?;
 
-    info!("[SHRINDO] Connecting to SHRINDO/SHRINE with Peer-ID: {}",local_peer_id);
+    info!("[Muscarine-Network] Connecting to LiberatoNetwork3.20 with Peer-ID: {}",local_peer_id);
 
     loop {
         /// # Event

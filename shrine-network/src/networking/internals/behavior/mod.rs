@@ -74,6 +74,8 @@ pub struct MuscarineBehaviour {
     // Peer Routing
     pub kademlia: libp2p::kad::Behaviour<MemoryStore>,
 
+    //pub floodsub: FloodsubBehaviour,
+
     // Relay
     pub relay_server: libp2p::relay::Behaviour,
     //request_response: RequestResponseBehaviour<FileExchangeCodec>,

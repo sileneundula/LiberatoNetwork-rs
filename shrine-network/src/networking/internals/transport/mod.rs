@@ -82,12 +82,13 @@ fn create_secure_transport_wss(keypair: &identity::Keypair) -> core::transport::
 fn create_secure_transport_quic(keypair: &identity::Keypair) -> libp2p::quic::GenTransport<libp2p::quic::tokio::Provider> {
     //let auth_config = noise::Config::new(&keypair).unwrap();
 
-    let mut transport: libp2p::quic::GenTransport<libp2p::quic::tokio::Provider> = libp2p::quic::tokio::Transport::new(QuicConfig::new(&keypair));
+    let transport = libp2p::quic::tokio::Transport::new(QuicConfig::new(&keypair));
+
     return transport
 
 }
 
-fn create_secure_transport_quic_old(keypair: &identity::Keypair) -> libp2p::quic::GenTransport<libp2p::quic::tokio::Provider> {
+fn create_secure_transport_quic_old(keypair: &identity::Keypair) {
     /*
     let auth_config = noise::Config::new(&keypair).unwrap();
 

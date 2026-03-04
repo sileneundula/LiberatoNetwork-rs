@@ -1,4 +1,4 @@
-//! # SHRINE NETWORK
+//! # Liberato NETWORK
 //! 
 //! Interoperability
 //! 
