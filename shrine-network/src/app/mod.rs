@@ -3,6 +3,8 @@ use libp2p::futures::StreamExt;
 use log::{warn,info, trace, debug};
 use log::error;
 use pretty_env_logger;
+use tokio::io::AsyncBufReadExt;
+use crate::networking::internals::behavior::MuscarineBehaviourEvent;
 use crate::networking::internals::keys;
 use crate::networking::internals::swarm::{MuscarineSwarm};
 
@@ -36,10 +38,10 @@ use crate::networking::internals::behavior::topic::PeyoteTopic;
 const local_address: &str = "/ip4/127.0.0.1/tcp/9076";
 
 pub struct ShrindoApp;
-
+use crate::networking::internals::behavior::EventHandler;
 
 #[tokio::main]
-pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
+pub async fn main<T: EventHandler>() -> Result<(), Box<dyn std::error::Error>> {
     dotenvy::dotenv().unwrap();
 
     pretty_env_logger::init();
@@ -70,20 +72,23 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     //swarm.behaviour_mut().gossipsub.subscribe();
 
-
+    let mut stdin = tokio::io::BufReader::new(tokio::io::stdin()).lines(); 
     let id = swarm.listen_on(Multiaddr::from_str(local_address).unwrap())?;
 
     info!("[Muscarine-Network] Connecting to LiberatoNetwork3.20 with Peer-ID: {}",local_peer_id);
 
     loop {
         /// # Event
-        let event = swarm.select_next_some().await;
-
+        let event: SwarmEvent<crate::networking::internals::behavior::MuscarineBehaviourEvent> = swarm.select_next_some().await;
+        let line = stdin.next_line() => Some(EventType::Input(line.expect("can get line").expect("can read line from stdin"))),
         match event {
             SwarmEvent::NewListenAddr { listener_id, address} => {
                 info!("[Swarm] Listening On {} with listener_id: {}", local_address, listener_id);
             },
-            _ => ()
+            SwarmEvent::Behaviour(mut muscarine_behaviour_event) => {
+                info!("[Swarm] Received Behaviour Event: {:?}", muscarine_behaviour_event.handle_event());
+            },
+            _ => (),
         }
     }
 
@@ -94,5 +99,5 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 #[test]
 fn run() {
-    let x = main();
+    let x = main::<MuscarineBehaviourEvent>();
 }

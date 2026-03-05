@@ -86,8 +86,5 @@
 
 /// Internals
 pub mod internals;
-
-/// Bootstrapping Protocol (deprecated, now its own crate)
-pub mod bootstrap;
 /// Custom Protocols
 pub mod protocols;

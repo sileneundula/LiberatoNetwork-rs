@@ -51,32 +51,40 @@ use libp2p::gossipsub::Sha256Topic;
 use rand::rngs::OsRng;
 
 use crate::networking::internals::keys::P2PKeys;
-
+use log::info;
 
 pub mod peer_discovery;
 pub mod topic;
 
 #[derive(NetworkBehaviour)]
+#[behaviour(out_event = "MuscarineBehaviourEvent", event_process = false)]
 pub struct MuscarineBehaviour {
+    #[behaviour(out_event = "libp2p::autonat::v2::client::Event")]
     pub autonat_client: libp2p::autonat::v2::client::Behaviour,
+    #[behaviour(out_event = "libp2p::autonat::v2::server::Event")]
     pub autonat_server: libp2p::autonat::v2::server::Behaviour,
 
     // Ping (P2P)
+    #[behaviour(out_event = "libp2p::ping::Event")]
     pub ping: PingBehaviour,
 
     // PubSub
+    #[behaviour(out_event = "libp2p::gossipsub::Event")]
     pub gossipsub: libp2p::gossipsub::Behaviour,
     //floodsub: FloodsubBehaviour,
 
     // Identify
+    #[behaviour(out_event = "libp2p::identify::Event")]
     pub identify: IdentifyBehaviour,
     
     // Peer Routing
+    #[behaviour(out_event = "libp2p::kad::Event")]
     pub kademlia: libp2p::kad::Behaviour<MemoryStore>,
 
     //pub floodsub: FloodsubBehaviour,
 
     // Relay
+    #[behaviour(out_event = "libp2p::relay::Event")]
     pub relay_server: libp2p::relay::Behaviour,
     //request_response: RequestResponseBehaviour<FileExchangeCodec>,
 }
@@ -91,6 +99,7 @@ impl MuscarineBehaviour {
         Self {
             autonat_client: AutonatClient::new(rng, AutonatClientConfig::default()),
             autonat_server: AutonatServer::new(rng),
+            
             ping: PingBehaviour::new(PingConfig::default()),
             // TODO: remove unwrap
             gossipsub: GossipSubBehaviour::new(MessageAuthenticity::Signed(key.key.clone()), GossipConfigBuilder::default().validation_mode(libp2p::gossipsub::ValidationMode::Strict).build().unwrap()).unwrap(),
@@ -98,6 +107,99 @@ impl MuscarineBehaviour {
             //floodsub: FloodsubBehaviour::new(key.key.public().to_peer_id()),
             kademlia: KademliaBehaviour::new(key.key.public().to_peer_id(),MemoryStore::new(key.key.public().to_peer_id())), // Create a Memory Store Service For Gathering Peers
             relay_server: RelayServer::new(peer_id, RelayServerConfig::default())
+        }
+    }
+}
+
+#[derive(Debug)]
+#[allow(clippy::large_enum_variant)]
+pub enum MuscarineBehaviourEvent {
+    AutonatClient(libp2p::autonat::v2::client::Event),
+    AutonatServer(libp2p::autonat::v2::server::Event),
+    Ping(libp2p::ping::Event),
+    Gossipsub(libp2p::gossipsub::Event),
+    Identify(libp2p::identify::Event),
+    Kademlia(libp2p::kad::Event),
+    RelayServer(libp2p::relay::Event),
+}
+
+impl From<libp2p::autonat::v2::client::Event> for MuscarineBehaviourEvent {
+    fn from(event: libp2p::autonat::v2::client::Event) -> Self {
+        MuscarineBehaviourEvent::AutonatClient(event)
+    }
+}
+
+impl From<libp2p::autonat::v2::server::Event> for MuscarineBehaviourEvent {
+    fn from(event: libp2p::autonat::v2::server::Event) -> Self {
+        MuscarineBehaviourEvent::AutonatServer(event)
+    }
+}
+
+impl From<libp2p::ping::Event> for MuscarineBehaviourEvent {
+    fn from(event: libp2p::ping::Event) -> Self {
+        MuscarineBehaviourEvent::Ping(event)
+    }
+}
+
+impl From<libp2p::gossipsub::Event> for MuscarineBehaviourEvent {
+    fn from(event: libp2p::gossipsub::Event) -> Self {
+        MuscarineBehaviourEvent::Gossipsub(event)
+    }
+}
+
+impl From<libp2p::identify::Event> for MuscarineBehaviourEvent {
+    fn from(event: libp2p::identify::Event) -> Self {
+        MuscarineBehaviourEvent::Identify(event)
+    }
+}
+
+impl From<libp2p::kad::Event> for MuscarineBehaviourEvent {
+    fn from(event: libp2p::kad::Event) -> Self {
+        MuscarineBehaviourEvent::Kademlia(event)
+    }
+}
+
+impl From<libp2p::relay::Event> for MuscarineBehaviourEvent {
+    fn from(event: libp2p::relay::Event) -> Self {
+        MuscarineBehaviourEvent::RelayServer(event)
+    }
+}
+
+pub trait EventHandler {
+    fn handle_event(&mut self);
+}
+
+impl EventHandler for MuscarineBehaviourEvent {
+    fn handle_event(&mut self) {
+        match self {
+            MuscarineBehaviourEvent::AutonatClient(event) => {
+                // Handle Autonat Client Event
+                info!("[AutonatClient] Received Autonat Client Event: {:?}", event);
+            },
+            MuscarineBehaviourEvent::AutonatServer(event) => {
+                // Handle Autonat Server Event
+                info!("[AutonatServer] Received Autonat Server Event: {:?}", event);
+            },
+            MuscarineBehaviourEvent::Ping(event) => {
+                // Handle Ping Event
+                info!("[Ping] Received Ping Event: {:?}", event);
+            },
+            MuscarineBehaviourEvent::Gossipsub(event) => {
+                // Handle Gossipsub Event
+                info!("[Gossipsub] Received Gossipsub Event: {:?}", event);
+            },
+            MuscarineBehaviourEvent::Identify(event) => {
+                // Handle Identify Event
+                info!("[Identify] Received Identify Event: {:?}", event);
+            },
+            MuscarineBehaviourEvent::Kademlia(event) => {
+                // Handle Kademlia Event
+                info!("[Kademlia] Received Kademlia Event: {:?}", event);
+            },
+            MuscarineBehaviourEvent::RelayServer(event) => {
+                // Handle Relay Server Event
+                info!("[RelayServer] Received Relay Server Event: {:?}", event);
+            },
         }
     }
 }
