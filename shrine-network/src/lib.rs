@@ -22,4 +22,3 @@ pub mod errors;
 pub mod protocols;
 pub mod info;
 pub mod cli;
-pub mod events;
