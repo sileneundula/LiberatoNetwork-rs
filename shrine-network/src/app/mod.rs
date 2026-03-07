@@ -87,13 +87,13 @@ pub async fn main<T: EventHandler>() -> Result<(), Box<dyn std::error::Error>> {
     loop {
         let evt = {
             tokio::select! {
-                line = stdin.next_line() => Some(MuscarineCLICommand::CMD(line.expect("can get line").expect("can read line"))),
-                
+                line = stdin.next_line() => Some(MuscarineBehaviourEvent::Input(line.expect("can get line").expect("can read line"))),
     
                 event = swarm.next() => {
                     info!("Unhandled Swarm Event: {:?}", event);
                     None
                 },
+                
             }
         };
     }

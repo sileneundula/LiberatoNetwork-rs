@@ -131,6 +131,7 @@ pub enum MuscarineBehaviourEvent {
     Identify(libp2p::identify::Event),
     Kademlia(libp2p::kad::Event),
     RelayServer(libp2p::relay::Event),
+    Input(String),
 }
 
 impl From<libp2p::autonat::v2::client::Event> for MuscarineBehaviourEvent {
