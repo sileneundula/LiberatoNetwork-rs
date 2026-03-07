@@ -90,18 +90,10 @@ pub async fn main<T: EventHandler>() -> Result<(), Box<dyn std::error::Error>> {
                 line = stdin.next_line() => Some(MuscarineCLICommand::CMD(line.expect("can get line").expect("can read line"))),
                 
     
-                event = swarm.select_next_some() => {
+                event = swarm.next() => {
+                    info!("Unhandled Swarm Event: {:?}", event);
                     None
-                }
-                match event {
-                    SwarmEvent::NewListenAddr { listener_id, address} => {
-                        info!("[Swarm] Listening On {} with listener_id: {}", local_address, listener_id);
-                    },
-                    SwarmEvent::Behaviour(mut muscarine_behaviour_event) => {
-                        info!("[Swarm] Received Behaviour Event: {:?}", muscarine_behaviour_event.handle_event());
-                    },
-                    _ => (),
-                }
+                },
             }
         };
     }
