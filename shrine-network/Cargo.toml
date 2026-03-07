@@ -12,6 +12,10 @@ librustysigs = "0.2.0"
 serde = {version = "1.0.0", features=["derive"]}
 serde_yaml = "0.9.34"
 
+# Argument Parsing
+argh = "0.1.15"
+#clap = {version="4.5.60", features=["derive"]}
+
 # Zeroization
 zeroize = "1.8.2"
 

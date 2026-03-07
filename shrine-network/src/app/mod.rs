@@ -4,7 +4,7 @@ use log::{warn,info, trace, debug};
 use log::error;
 use pretty_env_logger;
 use tokio::io::AsyncBufReadExt;
-use crate::networking::internals::behavior::MuscarineBehaviourEvent;
+use crate::networking::internals::behavior::{MuscarineBehaviour, MuscarineBehaviourEvent};
 use crate::networking::internals::keys;
 use crate::networking::internals::swarm::{MuscarineSwarm};
 
@@ -12,13 +12,20 @@ use libp2p::floodsub::Topic;
 
 use libp2p::swarm::SwarmEvent;
 
-use libp2p::Multiaddr;
+use libp2p::{Multiaddr, PeerId, Swarm};
 
 use std::str::FromStr;
 
 use crate::core::internals::Utils;
 
 use libp2p::swarm::ListenAddresses;
+
+use crate::cli::MuscarineCLI;
+use crate::cli::MuscarineCLICommand;
+use tokio::io::{self, AsyncReadExt, AsyncWriteExt};
+
+
+//use std::io;
 
 use dotenvy;
 pub mod bootstrap;
@@ -78,23 +85,51 @@ pub async fn main<T: EventHandler>() -> Result<(), Box<dyn std::error::Error>> {
     info!("[Muscarine-Network] Connecting to LiberatoNetwork3.20 with Peer-ID: {}",local_peer_id);
 
     loop {
-        /// # Event
-        let event: SwarmEvent<crate::networking::internals::behavior::MuscarineBehaviourEvent> = swarm.select_next_some().await;
-        let line = stdin.next_line() => Some(EventType::Input(line.expect("can get line").expect("can read line from stdin"))),
-        match event {
-            SwarmEvent::NewListenAddr { listener_id, address} => {
-                info!("[Swarm] Listening On {} with listener_id: {}", local_address, listener_id);
-            },
-            SwarmEvent::Behaviour(mut muscarine_behaviour_event) => {
-                info!("[Swarm] Received Behaviour Event: {:?}", muscarine_behaviour_event.handle_event());
-            },
-            _ => (),
-        }
+        let evt = {
+            tokio::select! {
+                line = stdin.next_line() => Some(MuscarineCLICommand::CMD(line.expect("can get line").expect("can read line"))),
+                
+    
+                event = swarm.select_next_some() => {
+                    None
+                }
+                match event {
+                    SwarmEvent::NewListenAddr { listener_id, address} => {
+                        info!("[Swarm] Listening On {} with listener_id: {}", local_address, listener_id);
+                    },
+                    SwarmEvent::Behaviour(mut muscarine_behaviour_event) => {
+                        info!("[Swarm] Received Behaviour Event: {:?}", muscarine_behaviour_event.handle_event());
+                    },
+                    _ => (),
+                }
+            }
+        };
+    }
+
+    loop {
+
+            /// # Event
+            let event: SwarmEvent<crate::networking::internals::behavior::MuscarineBehaviourEvent> = swarm.select_next_some().await;
+        
+            //let line = stdin.next_line().await;
+            let mut buffer = Vec::new();
+            let input = tokio::io::stdin().read(&mut buffer).await;
+        
+            match event {
+                SwarmEvent::NewListenAddr { listener_id, address} => {
+                    info!("[Swarm] Listening On {} with listener_id: {}", local_address, listener_id);
+                },
+                SwarmEvent::Behaviour(mut muscarine_behaviour_event) => {
+                    info!("[Swarm] Received Behaviour Event: {:?}", muscarine_behaviour_event.handle_event());
+                },
+                _ => (),
+            }
+        //swarm.behaviour_mut().identify.push(peers);
+        //let mut cmd = String::new();
+        //io::stdin().read_line(&mut cmd)?;
     }
 
     Ok(())
-
-
 }
 
 #[test]

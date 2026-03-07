@@ -21,3 +21,4 @@ pub mod app;
 pub mod errors;
 pub mod protocols;
 pub mod info;
+pub mod cli;
