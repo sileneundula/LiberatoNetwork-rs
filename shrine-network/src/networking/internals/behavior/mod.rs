@@ -87,17 +87,6 @@ pub struct MuscarineBehaviour {
     #[behaviour(out_event = "libp2p::relay::Event")]
     pub relay_server: libp2p::relay::Behaviour,
     //request_response: RequestResponseBehaviour<FileExchangeCodec>,
-    #[behaviour(out_event = "ResponseChannelEvent")]
-    pub response: ResponseChannel,
-}
-
-pub struct ResponseChannel {
-    #[behaviour(out_event = "ResponseChannelEvent")]
-    pub response: String,
-}
-
-pub enum ResponseChannelEvent {
-    Error()
 }
 
 impl MuscarineBehaviour {
@@ -118,7 +107,6 @@ impl MuscarineBehaviour {
             //floodsub: FloodsubBehaviour::new(key.key.public().to_peer_id()),
             kademlia: KademliaBehaviour::new(key.key.public().to_peer_id(),MemoryStore::new(key.key.public().to_peer_id())), // Create a Memory Store Service For Gathering Peers
             relay_server: RelayServer::new(peer_id, RelayServerConfig::default()),
-            response: ResponseChannel { response: String::from("") }
         }
     }
 }
@@ -135,6 +123,15 @@ pub enum MuscarineBehaviourEvent {
     RelayServer(libp2p::relay::Event),
     Input(String),
     ResponseSender(String),
+}
+
+impl PartialEq<MuscarineBehaviourEvent> for MuscarineBehaviourEvent {
+    fn eq(&self, other: &MuscarineBehaviourEvent) -> bool {
+        self == other
+    }
+    fn ne(&self, other: &MuscarineBehaviourEvent) -> bool {
+        self != other
+    }
 }
 
 impl From<libp2p::autonat::v2::client::Event> for MuscarineBehaviourEvent {

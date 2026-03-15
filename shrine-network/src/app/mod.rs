@@ -23,7 +23,7 @@ use libp2p::swarm::ListenAddresses;
 use crate::cli::MuscarineCLI;
 use crate::cli::MuscarineCLICommand;
 use tokio::io::{self, AsyncReadExt, AsyncWriteExt};
-
+use futures::Stream;
 
 //use std::io;
 
@@ -38,6 +38,7 @@ const SHRINDO_TOPIC_ESSENTIALS: &str = "Lament-Essentials"; // search for essent
 
 /// Constants
 pub mod constants;
+pub mod core;
 
 use crate::app::constants::DEFAULT_P2P;
 use crate::networking::internals::behavior::topic::PeyoteTopic;
@@ -85,7 +86,7 @@ pub async fn main<T: EventHandler>() -> Result<(), Box<dyn std::error::Error>> {
     info!("[Muscarine-Network] Connecting to LiberatoNetwork3.20 with Peer-ID: {}",local_peer_id);
 
     loop {
-        let evt = {
+        let evt: Option<MuscarineBehaviourEvent> = {
             tokio::select! {
                 line = stdin.next_line() => Some(MuscarineBehaviourEvent::Input(line.expect("can get line").expect("can read line"))),
     
@@ -93,9 +94,16 @@ pub async fn main<T: EventHandler>() -> Result<(), Box<dyn std::error::Error>> {
                     info!("Unhandled Swarm Event: {:?}", event);
                     None
                 },
-                
             }
         };
+        println!("DEBUG: {:?}", evt);
+        // Handle evt event
+        if evt == Some(MuscarineBehaviourEvent::Input(String::from("ls"))) {
+            println!("Listing Peers");
+        }
+        else {
+            println!("Error");
+        }
     }
 
     loop {
@@ -122,6 +130,10 @@ pub async fn main<T: EventHandler>() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     Ok(())
+}
+
+async fn event_handler(event: MuscarineBehaviourEvent) {
+
 }
 
 #[test]

@@ -13,8 +13,9 @@ serde = {version = "1.0.0", features=["derive"]}
 serde_yaml = "0.9.34"
 
 # Argument Parsing
-argh = "0.1.15"
-#clap = {version="4.5.60", features=["derive"]}
+#argh = "0.1.15"
+clap = {version="4.5.60", features=["derive"]}
+#pico-args = "0.5.0"
 
 # Zeroization
 zeroize = "1.8.2"
