@@ -22,3 +22,6 @@ pub mod errors;
 pub mod protocols;
 pub mod info;
 pub mod cli;
+
+/// MuscarineHandler: The Main Logic In The P2P Network.
+pub mod muscarinehandler;

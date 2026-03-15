@@ -24,7 +24,6 @@ use crate::cli::MuscarineCLI;
 use crate::cli::MuscarineCLICommand;
 use tokio::io::{self, AsyncReadExt, AsyncWriteExt};
 use futures::Stream;
-
 //use std::io;
 
 use dotenvy;
@@ -80,7 +79,7 @@ pub async fn main<T: EventHandler>() -> Result<(), Box<dyn std::error::Error>> {
 
     //swarm.behaviour_mut().gossipsub.subscribe();
 
-    let mut stdin = tokio::io::BufReader::new(tokio::io::stdin()).lines(); 
+    let mut stdin: io::Lines<io::BufReader<io::Stdin>> = tokio::io::BufReader::new(tokio::io::stdin()).lines(); 
     let id = swarm.listen_on(Multiaddr::from_str(local_address).unwrap())?;
 
     info!("[Muscarine-Network] Connecting to LiberatoNetwork3.20 with Peer-ID: {}",local_peer_id);
@@ -90,7 +89,7 @@ pub async fn main<T: EventHandler>() -> Result<(), Box<dyn std::error::Error>> {
             tokio::select! {
                 line = stdin.next_line() => Some(MuscarineBehaviourEvent::Input(line.expect("can get line").expect("can read line"))),
     
-                event = swarm.next() => {
+                event = swarm.select_next_some() => {
                     info!("Unhandled Swarm Event: {:?}", event);
                     None
                 },

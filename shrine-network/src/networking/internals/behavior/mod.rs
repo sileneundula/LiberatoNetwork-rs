@@ -19,6 +19,7 @@ use libp2p::autonat::v2::client::Config as AutonatClientConfig;
 use libp2p::autonat::v2::server::Behaviour as AutonatServer;
 use libp2p::gossipsub::Behaviour as GossipSubBehaviour;
 use libp2p::gossipsub::Config as GossipSubConfig;
+use libp2p::ping::Event;
 #[macro_use(NetworkBehaviour)]
 use libp2p::swarm::NetworkBehaviour;
 
@@ -125,6 +126,15 @@ pub enum MuscarineBehaviourEvent {
     ResponseSender(String),
 }
 
+impl PartialEq for MuscarineBehaviourEvent {
+    fn eq(&self, other: &Self) -> bool {
+        match (self,other) {
+            (MuscarineBehaviourEvent::Input(a), MuscarineBehaviourEvent::Input(b)) => a == b,
+            _ => false
+        }
+    }
+}
+/*
 impl PartialEq<MuscarineBehaviourEvent> for MuscarineBehaviourEvent {
     fn eq(&self, other: &MuscarineBehaviourEvent) -> bool {
         self == other
@@ -133,6 +143,7 @@ impl PartialEq<MuscarineBehaviourEvent> for MuscarineBehaviourEvent {
         self != other
     }
 }
+*/
 
 impl From<libp2p::autonat::v2::client::Event> for MuscarineBehaviourEvent {
     fn from(event: libp2p::autonat::v2::client::Event) -> Self {
