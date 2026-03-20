@@ -57,3 +57,5 @@ toml = "0.9.9"
 fixedstr = {version = "0.5.10", features=["serde"]}
 
 serde-big-array = "0.5.1"
+
+libslug = "0.7.2"

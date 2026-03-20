@@ -19,5 +19,6 @@ pub struct MuscarineCommandCli(pub MuscarineCommands);
 
 pub enum MuscarineCommands {
     ls,
-    lsp,
+    lsp, // list peers
+    retv,
 }
