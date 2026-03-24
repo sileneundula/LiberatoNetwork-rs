@@ -54,7 +54,7 @@ url = "2.5.7"
 
 toml = "0.9.9"
 
-fixedstr = {version = "0.5.10", features=["serde"]}
+fixedstr = {version = "0.5.10", features=["serde","pub-tstr"]}
 
 serde-big-array = "0.5.1"
 

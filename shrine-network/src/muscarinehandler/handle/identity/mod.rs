@@ -1,3 +1,7 @@
+//! # MuscarineHandler/Handle/Identity
+//! 
+//! This module contains the identity information using x59-fmt.
+
 use std::str::FromStr;
 
 use fixedstr::str256;
@@ -5,6 +9,7 @@ use librustysigs::registry::ShulginSigning;
 use libslug::{errors::SlugErrors, slugcrypt::internals::signature::shulginsigning::{ShulginKeypair, ShulginSignature}};
 use serde::{Serialize,Deserialize};
 
+// TODO: Make keypair longer to 4000 bytes
 #[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash,Serialize,Deserialize)]
 pub struct MuscarineIdentity {
     common_name: str256,
@@ -53,3 +58,6 @@ fn example_identity() {
 
     println!("{}",output)
 }
+
+/// IdentityV1
+pub mod identityv1;
