@@ -2,11 +2,15 @@ use std::str::FromStr;
 
 use fixedstr::str256;
 use fixedstr::tstr;
+use libslug::slugcrypt::internals::signature::esphand_signature::EsphandKeypair;
+use libslug::slugcrypt::internals::signature::shulginsigning::ShulginKeypair;
+use libslug::slugcrypt::traits::IntoX59SecretKey;
 use crate::muscarinehandler::handle::traits::MuscarineIdentity;
 use libslug::prelude::SlugDigest;
 use libslug::slugcrypt::internals::signature::shulginsigning;
 use libslug::slugcrypt::internals::signature::esphand_signature;
 use libslug::slugcrypt::internals::signature::utils::signing_csprng;
+use crate::muscarinehandler::handle::traits::MuscarineIdentitySecret;
 
 #[derive(Clone,Copy,Hash,PartialEq,PartialOrd,Debug)]
 pub struct MuscarineIdentityV1 {
@@ -35,6 +39,7 @@ pub enum CipherSuites {
     AbsolveSigning, // ML-DSA3 + ED25519
 }
 
+type Key = tstr<4096>;
 
 // Add Cipher Suite Checksum
 
@@ -66,17 +71,76 @@ impl MuscarineIdentity for MuscarineIdentityV1 {
             return str256::new()
         }
     }
-    fn generate(identity: CipherSuites) {
+}
+
+impl MuscarineIdentitySecret for MuscarineIdentityV1WithSecretKey {
+    fn generate(identity: CipherSuites) -> Result<Self,str256> {
         match identity {
-            CipherSuites::ShulginSigning => {
-                let x = shulginsigning::ShulginKeypair::generate();
-            }
-            CipherSuites::AbsolveSigning => {
-
-            }
             CipherSuites::EsphandSigning => {
+                let x = EsphandKeypair::generate();
+                let key = x.into_x59().unwrap();
+                let (ed25519, falcon1024) = key.split_once("/").unwrap();
+                let (ed25519pk, ed25519sk) = ed25519.split_once(":").unwrap();
+                let (falcon1024pk, falcon1024sk) = falcon1024.split_once(":").unwrap();
+                let mut output_pk = String::new();
+                output_pk.push_str(ed25519pk);
+                output_pk.push_str(":");
+                output_pk.push_str(falcon1024pk);
+
+                let mut output_sk = String::new();
+                output_sk.push_str(ed25519sk);
+                output_sk.push_str(":");
+                output_sk.push_str(falcon1024sk);
+
+                let mut pk_output_mutable: tstr<4096> = tstr::new();
+                let mut sk_output_mutable: tstr<4096> = tstr::new();
+                pk_output_mutable.push(&output_pk);
+                sk_output_mutable.push(&output_sk);
+
+                //let output_pk_2: tstr<4096> = tstr::<4096>::from_str(&output_pk).unwrap();
+                //let output_sk_2: tstr<4096> = tstr::<4096>::from_str(&output_sk).unwrap();
+
+
+                return Ok(MuscarineIdentityV1WithSecretKey { 
+                    public_key: pk_output_mutable, 
+                    secret_key: sk_output_mutable,
+                    cipher_suite: identity.cipher_suite_id()
+                })
 
             }
+            CipherSuites::ShulginSigning => {
+                let x = ShulginKeypair::generate();
+                let output = x.to_x59_format_full().unwrap();
+                let output_2 = output.split_once("/");
+                let (pk, sk) = output_2.unwrap();
+
+                let mut pk_mutable: tstr<4096> = tstr::new();
+                pk_mutable.push(pk);
+
+                let mut sk_mutable: tstr<4096> = tstr::new();
+                sk_mutable.push(sk);
+
+                //let sk_2: tstr<4096> = tstr::from_str(sk).unwrap();
+                //let pk_2: tstr<4096> = tstr::from_str(pk).unwrap();
+                //let output_key_sk: tstr<4096> = Key::from_str(sk).unwrap();
+                //let output_key: tstr<4096> = Key::from_str(pk).unwrap();
+
+                return Ok(MuscarineIdentityV1WithSecretKey {
+                    public_key: pk_mutable,
+                    secret_key: sk_mutable,
+                    cipher_suite: identity.cipher_suite_id(),
+                })
+            }
+            _ => panic!("No Valid Algorithm")
         }
     }
+}
+
+#[test]
+fn create_identity() {
+    let esphandsignature = MuscarineIdentityV1WithSecretKey::generate(CipherSuites::EsphandSigning).unwrap();
+    let shulginsigning = MuscarineIdentityV1WithSecretKey::generate(CipherSuites::ShulginSigning).unwrap();
+
+    println!("{:?}",esphandsignature);
+    println!("{:?}",shulginsigning);
 }

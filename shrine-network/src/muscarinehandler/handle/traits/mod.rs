@@ -9,6 +9,8 @@ pub trait MuscarineEventInfo {
 
 pub trait MuscarineIdentity {
     fn address(&self, address_scheme: AddressScheme) -> str256;
-    fn generate(identity: CipherSuites) -> Self;
 }
 
+pub trait MuscarineIdentitySecret: Sized {
+    fn generate(identity: CipherSuites) -> Result<Self,str256>;
+}
