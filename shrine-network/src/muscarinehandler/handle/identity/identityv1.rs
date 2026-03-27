@@ -14,6 +14,13 @@ pub struct MuscarineIdentityV1 {
     cipher_suite: str256,
 }
 
+#[derive(Clone,Copy,Hash,PartialEq,PartialOrd,Debug)]
+pub struct MuscarineIdentityV1WithSecretKey {
+    public_key: tstr<4096>,
+    secret_key: tstr<4096>,
+    cipher_suite: str256,
+}
+
 #[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash)]
 pub enum AddressScheme {
     X59FMT,

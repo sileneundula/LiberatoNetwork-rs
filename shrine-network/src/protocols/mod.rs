@@ -38,6 +38,10 @@
 //! - [ ] MIP-40 Protocol (TBD) (Muscarine Improvement Proposal 40: Decentralized Accessibility Standard)
 //! - [ ] MIP-41 Protocol (TBD) (Muscarine Improvement Proposal 41: Decentralized Maintainability Standard)
 //! - [ ] MIP-42 Protocol (TBD) (Muscarine Improvement Proposal 42: Decentralized Extensibility Standard)
+//! 
+//! ## Liberato
+//! 
+//! - [ ] 07: Pull-From-Chain
 
 /// Universal-ICD Proto
 pub mod universal_icd_protocol;
@@ -47,3 +51,6 @@ pub mod storage;
 
 /// Chain Request Proto
 pub mod chain_request;
+
+pub mod liberato_protocols;
+pub mod muscarine_protocols;
