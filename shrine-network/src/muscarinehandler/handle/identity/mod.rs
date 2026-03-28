@@ -9,6 +9,8 @@ use librustysigs::registry::ShulginSigning;
 use libslug::{errors::SlugErrors, slugcrypt::internals::signature::shulginsigning::{ShulginKeypair, ShulginSignature}};
 use serde::{Serialize,Deserialize};
 
+pub mod traits;
+
 // TODO: Make keypair longer to 4000 bytes
 #[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash,Serialize,Deserialize)]
 pub struct MuscarineIdentity {

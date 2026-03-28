@@ -11,11 +11,65 @@ use libslug::slugcrypt::internals::signature::shulginsigning;
 use libslug::slugcrypt::internals::signature::esphand_signature;
 use libslug::slugcrypt::internals::signature::utils::signing_csprng;
 use crate::muscarinehandler::handle::traits::MuscarineIdentitySecret;
+use crate::muscarinehandler::handle::identity::traits::MuscarineIdentityTrait;
 
 #[derive(Clone,Copy,Hash,PartialEq,PartialOrd,Debug)]
 pub struct MuscarineIdentityV1 {
     public_key: tstr<4096>, // TODO: Make 4000 bytes long
     cipher_suite: str256,
+}
+
+#[derive(Clone,Copy,Hash,PartialEq,PartialOrd,Debug)]
+pub struct MuscarineIdentityV1Secret {
+    private_key: tstr<4096>,
+    cipher_suite: str256,
+}
+
+impl MuscarineIdentityTrait for MuscarineIdentityV1Secret {
+    fn public_key(&self) -> tstr<4096> {
+        let x: str256 = self.cipher_suite;
+        let ciphersuite = CipherSuites::from_cipher_suite_id(x);
+
+        //TODO: Work On Libslug20
+        match ciphersuite {
+            CipherSuites::ShulginSigning => {
+                return self.private_key
+            }
+            CipherSuites::EsphandSigning => {
+                return self.private_key
+            }
+            _ => panic!("No Valid Option")
+        }
+    }
+    fn generate(cipher_suite: CipherSuites) -> Self {
+        match cipher_suite {
+            CipherSuites::ShulginSigning => {
+                let x = ShulginKeypair::generate();
+                let keypair = x.to_x59_format_full().unwrap();
+                let mut keypair_output: tstr<4096> = tstr::new();
+                keypair_output.push_str(&keypair);
+
+                return Self {
+                    private_key: keypair_output,
+                    cipher_suite: cipher_suite.cipher_suite_id(),
+                }
+            }
+            CipherSuites::EsphandSigning => {
+                let x = EsphandKeypair::generate();
+                let output = x.into_x59().unwrap();
+                let mut keypair: tstr<4096> = tstr::new();
+                keypair.push_str(&output);
+
+                return Self {
+                    private_key: keypair,
+                    cipher_suite: cipher_suite.cipher_suite_id(),
+                }
+            }
+            _ => {
+                panic!("No valid option")
+            }
+        }
+    }
 }
 
 #[derive(Clone,Copy,Hash,PartialEq,PartialOrd,Debug)]
@@ -50,6 +104,14 @@ impl CipherSuites {
             CipherSuites::ShulginSigning => return str256::from_str("slug20_shulginsigning_sphincs_and_ed25519").unwrap(),
             CipherSuites::EsphandSigning => return str256::from_str("slug20_esphandsigning_falcon1024_and_ed25519").unwrap(),
             CipherSuites::AbsolveSigning => return str256::from_str("slug20_absolvesigning_ml_dsa_and_ed25519").unwrap(),
+        }
+    }
+    pub fn from_cipher_suite_id(ciphersuite: str256) -> Self {
+        match ciphersuite.as_str() {
+            "slug20_shulginsigning_sphincs_and_ed25519" => return CipherSuites::ShulginSigning,
+            "slug20_esphandsigning_falcon1024_and_ed25519" => return CipherSuites::EsphandSigning,
+            "slug20_absolvesigning_ml_dsa_and_ed25519" => return CipherSuites::AbsolveSigning,
+            _ => panic!("No CipherSuite Selected")
         }
     }
 }
