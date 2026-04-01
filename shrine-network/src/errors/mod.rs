@@ -10,6 +10,19 @@
 use thiserror::Error;
 
 
+/// # MuscarineNetworkError
+/// 
+/// This is the main error handling enum that also includes many of other errors implemented into it.
+#[derive(Error,Debug)]
+pub enum MuscarineNetworkError {
+    #[error("The Networking Stack Threw An Error")]
+    NetworkingError,
+    #[error("The Serialization of Data has returned an Error")]
+    SerializationError,
+    #[error("An Unknown Error Has Occured")]
+    UnknownError,
+}
+
 
 #[derive(Error,Debug)]
 pub enum NetworkingStackErrors {
