@@ -88,6 +88,9 @@ pub struct MuscarineBehaviour {
     #[behaviour(out_event = "libp2p::relay::Event")]
     pub relay_server: libp2p::relay::Behaviour,
     //request_response: RequestResponseBehaviour<FileExchangeCodec>,
+
+    //#[behaviour(ignore)]
+    
 }
 
 impl MuscarineBehaviour {

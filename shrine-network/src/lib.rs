@@ -20,8 +20,14 @@ pub mod core;
 pub mod app;
 pub mod errors;
 pub mod protocols;
+
+pub mod protocols2;
+
 pub mod info;
 pub mod cli;
 
 /// MuscarineHandler: The Main Logic In The P2P Network.
 pub mod muscarinehandler;
+
+/// Slab-of-Data
+pub mod slab;

@@ -6,19 +6,20 @@
 //! 
 //! MuscarineNetwork offers Command-Line-Interface usage for users that is both extensible and easy to use. It aims to create a decentralized network where Peer-2-Peer communication can be achieved.
 
+use clap::{Args, Parser, Subcommand, ValueEnum};
 
-use clap::Parser;
 
 /// # Custom Protocol ID
 /// 
 /// A fixedstr of 256 bytes for calling custom protocols.
 type CUSTOM_PROTOCOL_ID = fixedstr::str256;
 
+#[derive(Parser)]
+#[command(name = "oint")]
 #[derive(Debug,Clone,PartialEq,PartialOrd,Hash)]
 pub struct MuscarineCommands {
-    action: String,
-
-    config: String,
+    #[command(subcommand)]
+    action: MuscarineActionCommands,
 }
 
 #[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash)]
@@ -50,7 +51,7 @@ pub struct MuscarineCommandHandler {
 /// ## Implemented
 /// 
 /// - [ ] 
-#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash)]
+#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash, Args, Subcommand)]
 pub enum MuscarineActionCommands {
     ls(MuscarineListCommands),
     retv(MuscarineRetrieveCommands), // retrieve
@@ -68,42 +69,42 @@ pub enum MuscarineActionCommands {
     ol_apps(MuscarineOlApps)
 }
 
-#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash)]
+#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash,Subcommand, Args)]
 pub enum MuscarineSubcommands {
-    MuscarineKeys(), // muscarine-keys
-    MuscarineApps(), // muscarine-apps
-    MuscarineInterop(), // muscarine-interop
-    MuscarineBootstrap(), // muscarine-bootstrap
-    MuscarineProtocol(), // muscarine-protocol
-    MuscarineServices(), // muscarine-services
+    MuscarineKeys, // muscarine-keys
+    MuscarineApps, // muscarine-apps
+    MuscarineInterop, // muscarine-interop
+    MuscarineBootstrap, // muscarine-bootstrap
+    MuscarineProtocol, // muscarine-protocol
+    MuscarineServices, // muscarine-services
 }
 
 /// # MuscarineExtensibleProtocol
 /// 
 /// Includes the Standard Library and Custom Protocol Usage
-#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash)]
+#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash,Subcommand)]
 pub enum MuscarineExtensibleProtocol {
     Standard(MuscarineStandardProtocols),
     CustomProtocol(CUSTOM_PROTOCOL_ID),
 }
 
-#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash)]
+#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash,Parser,ValueEnum)]
 pub enum MuscarineStandardProtocols {
     PullFromChain,
 }
 
-#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash)]
+#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash,Parser,ValueEnum)]
 pub enum MuscarineAuditCommands {
     peers,
 }
 
-#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash)]
+#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash,Parser,ValueEnum)]
 pub enum MuscarineOlApps {
     Install,
     Remove,
 }
 
-#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash)]
+#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash,Parser,ValueEnum)]
 pub enum MuscarineListCommands {
     peers, // p: Peers connected to
     files, // f: Files in the sandboxed directory
@@ -118,14 +119,14 @@ pub enum MuscarineListCommands {
     apps, // apps: Local Apps to the protocol
 }
 
-#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash)]
+#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash,Parser,ValueEnum)]
 pub enum MuscarineRetrieveCommands {
     address, // addr: Retrieves an address
     multiaddr, // multi: Retrieves a MultiAddr
     hash, // h: hash retrieve
 }
 
-#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash)]
+#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash,Parser,ValueEnum)]
 pub enum MuscarineWhoAmICommands {
     info, // i: Information
     user, // u: User information
