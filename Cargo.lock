@@ -2900,6 +2900,9 @@ name = "lazy_static"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
+dependencies = [
+ "spin",
+]
 
 [[package]]
 name = "leb128fmt"
@@ -2928,10 +2931,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2874a2af47a2325c2001a6e6fad9b16a53b802102b528163885171cf92b15976"
 
 [[package]]
+name = "liberato-address-scheme"
+version = "0.1.0"
+dependencies = [
+ "blake2-rfc",
+ "fixedstr",
+ "openinternetcryptographykeys 0.2.0",
+ "serde",
+]
+
+[[package]]
 name = "liberato-addressing"
 version = "0.1.0"
 dependencies = [
  "blake2-rfc",
+ "blake3",
  "fixedstr",
 ]
 
@@ -2951,6 +2965,12 @@ dependencies = [
  "serde",
  "toml 0.9.9+spec-1.0.0",
 ]
+
+[[package]]
+name = "libm"
+version = "0.2.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b6d2cec3eae94f9f509c767b45932f1ada8350c4bdb85af2fcab4a3c14807981"
 
 [[package]]
 name = "libnamespace-pivot"
@@ -3807,6 +3827,65 @@ dependencies = [
 ]
 
 [[package]]
+name = "libslug"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "441ad313cb1ceb44e1dd930f4fd4648deb2dd82a72e98da7a8fad250b91d0261"
+dependencies = [
+ "aes-gcm",
+ "argon2",
+ "ascon-aead128",
+ "base32",
+ "base58",
+ "bincode 1.3.3",
+ "bip32",
+ "blake2",
+ "blake3",
+ "bls-signatures",
+ "chacha20poly1305 0.10.1",
+ "der 0.8.0",
+ "digest 0.11.2",
+ "dirs",
+ "ecdsa",
+ "ecies-ed25519-silene",
+ "ed25519-dalek",
+ "ed448",
+ "ed448-goldilocks",
+ "ed448-goldilocks-plus",
+ "fixedstr",
+ "hybrid-array 0.2.3",
+ "hybrid-array 0.3.1",
+ "k256",
+ "leslie_lamport",
+ "log",
+ "ml-dsa",
+ "ml-kem",
+ "pem",
+ "pqcrypto-falcon",
+ "pqcrypto-sphincsplus",
+ "pqcrypto-traits",
+ "protobuf 4.34.1-release",
+ "rand 0.8.5",
+ "rsa",
+ "schnorrkel",
+ "securerand-rs",
+ "serde",
+ "serde-big-array",
+ "serde-encrypt",
+ "serde_json",
+ "serde_yaml 0.9.34+deprecated",
+ "sha2 0.11.0",
+ "slugencode",
+ "subtle",
+ "subtle-encoding",
+ "thiserror 2.0.18",
+ "tiny-bip39",
+ "tiny-keccak",
+ "winternitz-ots",
+ "zeroize",
+]
+
+[[package]]
 name = "line-clipping"
 version = "0.3.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4122,6 +4201,7 @@ dependencies = [
  "libslug 0.9.0",
  "log",
  "multiaddr",
+ "openinternetcryptographykeys 0.1.0",
  "pretty_env_logger",
  "rand 0.8.5",
  "ratatui",
@@ -4297,6 +4377,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "num-bigint-dig"
+version = "0.8.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e661dda6640fad38e827a6d4a310ff4763082116fe217f279885c97f511bb0b7"
+dependencies = [
+ "lazy_static",
+ "libm",
+ "num-integer",
+ "num-iter",
+ "num-traits",
+ "rand 0.8.5",
+ "smallvec",
+ "zeroize",
+]
+
+[[package]]
 name = "num-conv"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4323,12 +4419,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "num-iter"
+version = "0.1.45"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1429034a0490724d0075ebb2bc9e875d6503c3cf69e235a8941aa757d83ef5bf"
+dependencies = [
+ "autocfg",
+ "num-integer",
+ "num-traits",
+]
+
+[[package]]
 name = "num-traits"
 version = "0.2.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "071dfc062690e90b734c0b2273ce72ad0ffa95f0c74596bc250dcfd960262841"
 dependencies = [
  "autocfg",
+ "libm",
 ]
 
 [[package]]
@@ -4389,6 +4497,39 @@ name = "opaque-debug"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c08d65885ee38876c4f86fa503fb49d7b507c2b62552df7c70b2fce627e06381"
+
+[[package]]
+name = "openaddress-scheme-rs"
+version = "0.1.0"
+dependencies = [
+ "blake2-rfc",
+ "blake3",
+ "fixedstr",
+]
+
+[[package]]
+name = "openinternetcryptographykeys"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cb8ae069f42809cc2dd2305ed974a8feeb8f9cf5d2262164eed10afa5df98725"
+dependencies = [
+ "fixedstr",
+ "libslug 0.11.0",
+ "serde",
+ "zeroize",
+]
+
+[[package]]
+name = "openinternetcryptographykeys"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f95b9f86b512a63695dbff7388d87ce3d757306dd7959df36269a19b8b9bb72a"
+dependencies = [
+ "fixedstr",
+ "libslug 0.11.0",
+ "serde",
+ "zeroize",
+]
 
 [[package]]
 name = "openssl"
@@ -4509,6 +4650,12 @@ name = "paste"
 version = "1.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
+
+[[package]]
+name = "paste-complete"
+version = "1.0.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3a4cf96a295ab7f0ec2334fa557745c0e9526595f6ebabbb129563a98dfc1b2a"
 
 [[package]]
 name = "pbkdf2"
@@ -4681,6 +4828,17 @@ dependencies = [
  "atomic-waker",
  "fastrand",
  "futures-io",
+]
+
+[[package]]
+name = "pkcs1"
+version = "0.7.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c8ffb9f10fa047879315e6625af03c164b16962a5368d724ed16323b68ace47f"
+dependencies = [
+ "der 0.7.10",
+ "pkcs8",
+ "spki",
 ]
 
 [[package]]
@@ -4930,13 +5088,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "protobuf"
+version = "4.34.1-release"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5af3157e12bb2193b1ee85fd61fe9ebe737b63a22ab3774d7cbb7fb5f32b6425"
+dependencies = [
+ "cc",
+ "paste-complete",
+ "protobuf-macros",
+]
+
+[[package]]
 name = "protobuf-build"
 version = "0.14.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2df9942df2981178a930a72d442de47e2f0df18ad68e50a30f816f1848215ad0"
 dependencies = [
  "bitflags 1.3.2",
- "protobuf",
+ "protobuf 2.28.0",
  "protobuf-codegen",
  "regex",
 ]
@@ -4947,7 +5116,17 @@ version = "2.28.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "033460afb75cf755fcfc16dfaed20b86468082a2ea24e05ac35ab4a099a017d6"
 dependencies = [
- "protobuf",
+ "protobuf 2.28.0",
+]
+
+[[package]]
+name = "protobuf-macros"
+version = "4.34.1-release"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2b19d8dd07383acc9acc88034d66dec66da7ef87f54df25c8c924e5245606409"
+dependencies = [
+ "quote",
+ "syn 2.0.117",
 ]
 
 [[package]]
@@ -5064,7 +5243,7 @@ dependencies = [
  "bytes",
  "fxhash",
  "getset",
- "protobuf",
+ "protobuf 2.28.0",
  "raft-proto",
  "rand 0.8.5",
  "slog",
@@ -5081,7 +5260,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fb6884896294f553e8d5cfbdb55080b9f5f2f43394afff59c9f077e0f4b46d6b"
 dependencies = [
  "bytes",
- "protobuf",
+ "protobuf 2.28.0",
  "protobuf-build",
 ]
 
@@ -5395,6 +5574,26 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bd124222d17ad93a644ed9d011a40f4fb64aa54275c08cc216524a9ea82fb09f"
 dependencies = [
  "digest 0.10.7",
+]
+
+[[package]]
+name = "rsa"
+version = "0.9.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b8573f03f5883dcaebdfcf4725caa1ecb9c15b2ef50c43a07b816e06799bb12d"
+dependencies = [
+ "const-oid 0.9.6",
+ "digest 0.10.7",
+ "num-bigint-dig",
+ "num-integer",
+ "num-traits",
+ "pkcs1",
+ "pkcs8",
+ "rand_core 0.6.4",
+ "signature",
+ "spki",
+ "subtle",
+ "zeroize",
 ]
 
 [[package]]

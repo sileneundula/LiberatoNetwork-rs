@@ -12,6 +12,10 @@
 //! - /ol-app/marketplace-v1/<app>/<proto>
 #[macro_use]
 
+
+pub mod addressing;
+
+
 pub mod usage;
 #[macro_use]
 pub mod networking;

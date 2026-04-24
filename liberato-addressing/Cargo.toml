@@ -5,4 +5,7 @@ edition = "2024"
 
 [dependencies]
 fixedstr = {version="0.5.10", features=["serde", "no-alloc"]}
+
+# Blake2
 blake2-rfc = "0.2.18"
+blake3 = "1.8.4"

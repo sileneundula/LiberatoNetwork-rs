@@ -66,4 +66,6 @@ serde-big-array = "0.5.1"
 # UI
 ratatui = "0.30.0"
 
+# /silene/oick
+openinternetcryptographykeys = "0.1.0"
 

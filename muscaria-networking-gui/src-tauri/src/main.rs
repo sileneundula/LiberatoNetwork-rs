@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    peerslotus_lib::run()
+    muscaria_networking_gui_lib::run()
 }

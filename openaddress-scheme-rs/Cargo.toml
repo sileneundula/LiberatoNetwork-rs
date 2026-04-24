@@ -1,0 +1,10 @@
+[package]
+name = "openaddress-scheme-rs"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+fixedstr = {version="0.5.10", features=["serde"]}
+
+blake2-rfc = "0.2.17"
+blake3 = "1.8.4"

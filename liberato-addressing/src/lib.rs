@@ -20,6 +20,10 @@ use fixedstr::str64;
 use fixedstr::str128;
 use std::collections::HashSet;
 
+
+pub mod addresses;
+
+
 pub trait AddressScheme {
 
 }
@@ -67,3 +71,5 @@ pub struct LiberatoAddressWithData {
     network: str128,
     actions: [str32;10],
 }
+
+pub mod address;

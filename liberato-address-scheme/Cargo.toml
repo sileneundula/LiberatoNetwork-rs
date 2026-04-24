@@ -1,0 +1,14 @@
+[package]
+name = "liberato-address-scheme"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# silene/openinternetcryptographykeys
+openinternetcryptographykeys = "0.2.0"
+
+# Serialization
+serde = {version="1.0.0", features=["derive"]}
+fixedstr = {version="0.5.10", features=["serde"]}
+
+blake2-rfc = "0.2.17"
