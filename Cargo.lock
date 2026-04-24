@@ -2938,6 +2938,8 @@ dependencies = [
  "fixedstr",
  "openinternetcryptographykeys 0.2.0",
  "serde",
+ "serde_json",
+ "serde_yaml 0.9.34+deprecated",
 ]
 
 [[package]]
