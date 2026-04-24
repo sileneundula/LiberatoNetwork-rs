@@ -2945,15 +2945,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "liberato-addressing"
-version = "0.1.0"
-dependencies = [
- "blake2-rfc",
- "blake3",
- "fixedstr",
-]
-
-[[package]]
 name = "liberato-core-cli"
 version = "0.1.0"
 

@@ -19,6 +19,8 @@ use serde::Deserialize;
 use serde::Serialize;
 use bincode;
 use pem::Pem;
+use crate::identity::signature::LiberatoSignature;
+use crate::identity::signature::LiberatoSignatureWithMessage;
 
 use crate::prelude::CipherSuite;
 
@@ -28,9 +30,14 @@ pub mod cipher_suite;
 /// Extensions To Liberato Identity
 pub mod extension;
 
+pub mod signature;
+
 
 pub mod versions {
     pub const LIBERATO_IDENTITY_VERSION: &str = "LIBERATØv1.0";
+    pub const LIBERATO_IDENTITY_VERSION_PEM_PUBLIC: &str = "LIBERATØv1.0-PUBLIC";
+    pub const LIBERATO_IDENTITY_VERSION_PEM_PRIVATE: &str = "LIBERATØv1.0-PRIVATE";
+    pub const LIBERATO_IDENTITY_VERSION_PEM_SIGNATURE: &str = "LIBERATØv1.0-SIGNATURE";
 }
 
 /// # LiberatoIdentityAPI
@@ -65,6 +72,36 @@ impl GenerateLiberatoIdentity for LiberatoIdentityAPI {
     }
 }
 
+/// # LiberatoIdentity
+/// 
+/// ## Description
+/// 
+/// The Liberato Identity type is a simple type for representing Liberato/Muscarine Identities.
+/// 
+/// ## Fields
+/// 
+/// - [X] Address
+/// - [X] Address PK
+/// - [X] Public Key
+/// - [X] Secret Key
+/// - [X] Cipher Suite
+/// - [X] Extension
+/// - [X] Data Derived
+/// - [X] Nonce
+/// 
+/// ## Methods
+/// 
+/// - [X] Derive Liberato Address
+/// 
+/// ## Example
+/// 
+/// ```rust
+/// use liberato_address_scheme::identity::LiberatoIdentity;
+/// 
+/// fn main() {
+///     let x: LiberatoIdentity = LiberatoIdentityAPI::generate_liberato_identity(Slug20Algorithm::ShulginSigning);
+/// }
+/// ```
 #[derive(Debug,Clone,Serialize,Deserialize,PartialEq,PartialOrd,Hash)]
 pub struct LiberatoIdentity {
     // Addressing Scheme
@@ -105,6 +142,58 @@ impl LiberatoIdentityPublic {
             nonce: identity.nonce,
         }
     }
+    pub fn as_address(&self) -> String { 
+        self.address.to_string() 
+    }
+    pub fn as_address_pk(&self) -> String {
+        self.address_pk.to_string()
+    }
+    pub fn as_public_key(&self) -> String {
+        self.public_key.clone()
+    }
+    pub fn as_cipher_suite(&self) -> CipherSuite {
+        self.cipher_suite.clone()
+    }
+    pub fn as_extension(&self) -> String {
+        self.extension.clone()
+    }
+    pub fn as_data_derived(&self) -> Option<String> {
+        self.data_derived.clone()
+    }
+    pub fn as_nonce(&self) -> u64 {
+        self.nonce
+    }
+    pub fn into_bincode(&self) -> Result<Vec<u8>, crate::errors::LiberatoAddressError> {
+        let x = bincode::serialize(&self);
+        if x.is_ok() {
+            return Ok(x.unwrap())
+        }
+        else {
+            return Err(crate::errors::LiberatoAddressError::Unknown)
+        }
+    }
+    pub fn from_bincode(bytes: &[u8]) -> Result<LiberatoIdentityPublic, crate::errors::LiberatoAddressError> {
+        let x = bincode::deserialize(bytes);
+        if x.is_ok() {
+            return Ok(x.unwrap())
+        }
+        else {
+            return Err(crate::errors::LiberatoAddressError::Unknown)
+        }
+    }
+    pub fn into_liberato_address_pem(&self) -> String {
+        let x: Vec<u8> = self.into_bincode().unwrap();
+        Pem::new(versions::LIBERATO_IDENTITY_VERSION_PEM_PUBLIC, x).to_string()
+    }
+    pub fn from_liberato_address_pem<T: AsRef<str>>(key_as_pem: T) -> Result<LiberatoIdentityPublic, crate::errors::LiberatoAddressError> {
+        let x = Pem::from_str(key_as_pem.as_ref());
+        if x.is_ok() {
+            return LiberatoIdentityPublic::from_bincode(x.unwrap().contents())
+        }
+        else {
+            return Err(crate::errors::LiberatoAddressError::Unknown)
+        }
+    }
 }
 
 impl LiberatoIdentity {
@@ -129,6 +218,15 @@ impl LiberatoIdentity {
             return Err(crate::errors::LiberatoAddressError::Unknown)
         }
     }
+    pub fn from_bincode(bytes: &[u8]) -> Result<LiberatoIdentity, crate::errors::LiberatoAddressError> {
+        let x = bincode::deserialize(bytes);
+        if x.is_ok() {
+            return Ok(x.unwrap())
+        }
+        else {
+            return Err(crate::errors::LiberatoAddressError::Unknown)
+        }
+    }
     pub fn into_liberato_address_pem(&self) -> String {
         let x: Vec<u8> = self.into_bincode().unwrap();
         Pem::new(versions::LIBERATO_IDENTITY_VERSION, x).to_string()
@@ -136,7 +234,82 @@ impl LiberatoIdentity {
     pub fn get_pem_label() -> String {
         String::from(versions::LIBERATO_IDENTITY_VERSION)
     }
+    pub fn from_liberato_address_pem<T: AsRef<str>>(key_as_pem: T) -> Result<LiberatoIdentity, crate::errors::LiberatoAddressError> {
+        let x: Result<Pem, pem::PemError> = Pem::from_str(key_as_pem.as_ref());
+
+        if x.is_ok() {
+            let y: Result<LiberatoIdentity, Box<bincode::ErrorKind>> = bincode::deserialize(x.unwrap().contents());
+            if y.is_ok() {
+                return Ok(y.unwrap())
+            }
+            else {
+                return Err(crate::errors::LiberatoAddressError::Unknown)
+            }
+        }
+        else {
+            return Err(crate::errors::LiberatoAddressError::Unknown)
+        }
+    }
+    pub fn as_public(&self) -> LiberatoIdentityPublic {
+        LiberatoIdentityPublic {
+            address: self.address,
+            address_pk: self.address_pk,
+            public_key: self.public_key.clone(),
+            cipher_suite: self.cipher_suite.clone(),
+            extension: self.extension.clone(),
+            data_derived: self.data_derived.clone(),
+            nonce: self.nonce,
+        }
+    }
+    pub fn as_address(&self) -> String { 
+        self.address.to_string()
+    }
+    pub fn as_address_pk(&self) -> String {
+        self.address_pk.to_string()
+    }
+    pub fn as_cipher_suite(&self) -> CipherSuite {
+        self.cipher_suite.clone()
+    }
+    pub fn as_extension(&self) -> String {
+        self.extension.clone()
+    }
+    pub fn as_data_derived(&self) -> Option<String> {
+        self.data_derived.clone()
+    }
+    pub fn as_nonce(&self) -> u64 {
+        self.nonce
+    }
+    pub fn sign(&self, message: &[u8]) -> Result<LiberatoSignature, crate::errors::LiberatoAddressError> {
+        let x: OpenInternetCryptographySecretKey = self.into_private_key()?;
+        let sig = x.sign(message);
+        if sig.is_ok() {
+            return Ok(LiberatoSignature { signature: sig.unwrap() })
+        }
+        else {
+            return Err(crate::errors::LiberatoAddressError::Unknown)
+        }
+    }
+    pub fn into_private_key(&self) -> Result<OpenInternetCryptographySecretKey, crate::errors::LiberatoAddressError> {
+        let x = OpenInternetCryptographySecretKey::from_standard_pem_with_algorithm(self.secret_key.as_str(), self.cipher_suite.algorithm());
+        if x.is_ok() {
+            return Ok(x.unwrap())
+        }
+        else {
+            return Err(crate::errors::LiberatoAddressError::Unknown)
+        }
+    }
+    pub fn into_public_key(&self) -> Result<OpenInternetCryptographyPublicKey, crate::errors::LiberatoAddressError> {
+        let x = OpenInternetCryptographyPublicKey::from_standard_pem_with_algorithm(self.public_key.as_str(), self.cipher_suite.algorithm());
+        if x.is_ok() {
+            return Ok(x.unwrap())
+        }
+        else {
+            return Err(crate::errors::LiberatoAddressError::Unknown)
+        }
+    }
 }
+
+
 
 impl DeriveLiberatoAddress for LiberatoIdentity {
     fn derive_liberato_address<T: AsRef<str>>(public_key: T, extension: Option<T>) -> String {
@@ -166,7 +339,6 @@ impl DeriveLiberatoAddress for LiberatoIdentity {
         address
     }
 }
-
 #[test]
 fn generate_liberato_address_using_shulgin_signing() {
     let x: LiberatoIdentity = LiberatoIdentityAPI::generate_liberato_identity(Slug20Algorithm::ShulginSigning);
