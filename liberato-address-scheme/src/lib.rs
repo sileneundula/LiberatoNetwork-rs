@@ -11,3 +11,5 @@ pub mod address;
 
 /// Liberato Address Scheme Prelude
 pub mod prelude;
+
+pub mod errors;

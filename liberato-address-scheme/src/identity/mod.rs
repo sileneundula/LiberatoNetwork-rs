@@ -17,6 +17,8 @@ use blake2_rfc::blake2b::Blake2b;
 use fixedstr::str192;
 use serde::Deserialize;
 use serde::Serialize;
+use bincode;
+use pem::Pem;
 
 use crate::prelude::CipherSuite;
 
@@ -81,9 +83,59 @@ pub struct LiberatoIdentity {
 #[derive(Debug,Clone,Serialize,Deserialize,PartialEq,PartialOrd,Hash)]
 pub struct LiberatoIdentityPublic {
     pub address: str192,
+    pub address_pk: str192,
+    
     pub public_key: String,
     pub cipher_suite: CipherSuite,
+    
     pub extension: String,
+    pub data_derived: Option<String>,
+    pub nonce: u64,
+}
+
+impl LiberatoIdentityPublic {
+    pub fn from_identity(identity: LiberatoIdentity) -> LiberatoIdentityPublic {
+        LiberatoIdentityPublic {
+            address: identity.address,
+            address_pk: identity.address_pk,
+            public_key: identity.public_key,
+            cipher_suite: identity.cipher_suite,
+            extension: identity.extension,
+            data_derived: identity.data_derived,
+            nonce: identity.nonce,
+        }
+    }
+}
+
+impl LiberatoIdentity {
+    pub fn into_identity_public(&self) -> LiberatoIdentityPublic {
+        LiberatoIdentityPublic {
+            address: self.address,
+            address_pk: self.address_pk,
+            public_key: self.public_key.clone(),
+            cipher_suite: self.cipher_suite.clone(),
+            extension: self.extension.clone(),
+            data_derived: self.data_derived.clone(),
+            nonce: self.nonce,
+        }
+    }
+    pub fn into_bincode(&self) -> Result<Vec<u8>, crate::errors::LiberatoAddressError> {
+        let x = bincode::serialize(&self);
+
+        if x.is_ok() {
+            return Ok(x.unwrap())
+        }
+        else {
+            return Err(crate::errors::LiberatoAddressError::Unknown)
+        }
+    }
+    pub fn into_liberato_address_pem(&self) -> String {
+        let x: Vec<u8> = self.into_bincode().unwrap();
+        Pem::new(versions::LIBERATO_IDENTITY_VERSION, x).to_string()
+    }
+    pub fn get_pem_label() -> String {
+        String::from(versions::LIBERATO_IDENTITY_VERSION)
+    }
 }
 
 impl DeriveLiberatoAddress for LiberatoIdentity {
@@ -119,4 +171,10 @@ impl DeriveLiberatoAddress for LiberatoIdentity {
 fn generate_liberato_address_using_shulgin_signing() {
     let x: LiberatoIdentity = LiberatoIdentityAPI::generate_liberato_identity(Slug20Algorithm::ShulginSigning);
     println!("{}",serde_json::to_string_pretty(&x).unwrap());
+}
+
+#[test]
+fn hash_and_go() {
+    let x: LiberatoIdentity = LiberatoIdentityAPI::generate_liberato_identity(Slug20Algorithm::ShulginSigning);
+    println!("{}",x.into_liberato_address_pem());
 }
