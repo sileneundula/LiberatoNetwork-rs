@@ -5,5 +5,5 @@
 `LiberatøNetwork` is a **Novel, P2P, Decentralized Network** that aims to address issues with decentralization. It maintains robust features and protocols, built on libp2p-rs. These new protocols allow for a new internet space to be established in a peer to peer manner with additional benefits like providing support for blockchains, a robust PKI, decentralized sharing of data, and immutable storage.
 
 ### Crates
-- [ ] Liberato-Address: A Universal Address That Uses BLAKE2B Variable Digest with derived options.
+- [X] Liberato-Address-Scheme (v0.1.0): A Universal Address That Uses BLAKE2B Variable Digest with derived options.
 - [ ] Shrine-Networking: The main networking stack
