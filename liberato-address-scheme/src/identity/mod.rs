@@ -22,6 +22,7 @@ use pem::Pem;
 use crate::identity::signature::LiberatoSignature;
 use crate::identity::signature::LiberatoSignatureWithMessage;
 
+
 use crate::prelude::CipherSuite;
 
 /// Cipher Suite
@@ -30,6 +31,7 @@ pub mod cipher_suite;
 /// Extensions To Liberato Identity
 pub mod extension;
 
+/// Signature
 pub mod signature;
 
 
@@ -194,6 +196,24 @@ impl LiberatoIdentityPublic {
             return Err(crate::errors::LiberatoAddressError::Unknown)
         }
     }
+    /// # Verify
+    /// 
+    /// Verify a message with a signature.
+    pub fn verify<T: AsRef<[u8]>>(&self, message: T, signature: LiberatoSignature) -> bool {
+        let x: OpenInternetCryptographyPublicKey = self.into_public_key();
+        let is_valid = x.verify(message.as_ref(), &signature.signature);
+
+        if is_valid.is_err() {
+            return false
+        }
+        else {
+            return is_valid.unwrap()
+        }
+    }
+
+    pub fn into_public_key(&self) -> OpenInternetCryptographyPublicKey {
+        OpenInternetCryptographyPublicKey::from_standard_pem_with_algorithm(self.public_key.as_str(), self.cipher_suite.algorithm()).unwrap()
+    }
 }
 
 impl LiberatoIdentity {
@@ -279,9 +299,9 @@ impl LiberatoIdentity {
     pub fn as_nonce(&self) -> u64 {
         self.nonce
     }
-    pub fn sign(&self, message: &[u8]) -> Result<LiberatoSignature, crate::errors::LiberatoAddressError> {
+    pub fn sign<T: AsRef<[u8]>>(&self, message: T) -> Result<LiberatoSignature, crate::errors::LiberatoAddressError> {
         let x: OpenInternetCryptographySecretKey = self.into_private_key()?;
-        let sig = x.sign(message);
+        let sig = x.sign(message.as_ref());
         if sig.is_ok() {
             return Ok(LiberatoSignature { signature: sig.unwrap() })
         }
@@ -348,5 +368,11 @@ fn generate_liberato_address_using_shulgin_signing() {
 #[test]
 fn hash_and_go() {
     let x: LiberatoIdentity = LiberatoIdentityAPI::generate_liberato_identity(Slug20Algorithm::ShulginSigning);
+    let y: LiberatoSignature = x.sign("message".as_bytes()).unwrap();
+    let z: LiberatoIdentityPublic = x.into_identity_public();
+
+    println!("{}",z.verify("message", y.clone()));
+
+    println!("{}",y.into_liberato_address_pem());
     println!("{}",x.into_liberato_address_pem());
 }
