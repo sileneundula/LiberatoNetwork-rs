@@ -1,6 +1,14 @@
 [package]
 name = "liberato-address-scheme"
 version = "0.1.0"
+authors = ["silene","WeSpeakInCursive.xyz","0x20CB","SundialSource"]
+description = "The Rust Implementation of the Decentralized Addressing Scheme for Liberato-Address-Scheme"
+categories = ["cryptography"]
+keywords = ["liberato","decentralization","web3","address","cryptography"]
+license = "Apache-2.0 OR MIT"
+readme = "README.md"
+repository = "https://github.com/sileneundula/LiberatoNetwork-rs/"
+homepage = "https://wespeakincursive.xyz"
 edition = "2024"
 
 [dependencies]
