@@ -1,5 +1,11 @@
 # Liberato Address Scheme
 
+![Static Badge](https://img.shields.io/badge/WeSpeakInCursive-purple?style=flat-square&label=Owner)
+![Crates.io Version](https://img.shields.io/crates/v/liberato-address-scheme?style=flat-square)
+![Crates.io Total Downloads](https://img.shields.io/crates/d/liberato-address-scheme?style=flat-square)
+![Crates.io License](https://img.shields.io/crates/l/liberato-address-scheme?style=flat-square)
+
+
 ## Description
 
 `liberato-address-scheme` is a library for address schemes based on `OpenInternetCryptographyKeys` and `libslug20`.
