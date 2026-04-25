@@ -6,4 +6,5 @@
 
 ### Crates
 - [X] **Liberato-Address-Scheme (v0.1.0):** A Universal Address That Uses BLAKE2B Variable Digest with derived options.
-- [ ] Shrine-Networking: The main networking stack
+- [ ] **Liberato-Digital-Asset-Standard**: A Standard For Digital Assets
+- [ ] Shrine-Network: The main networking stack

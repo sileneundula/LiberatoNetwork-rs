@@ -1,7 +1,0 @@
-[package]
-name = "libnamespace-pivot"
-version = "0.1.0"
-edition = "2024"
-
-[dependencies]
-slugencode = "0.1.0"

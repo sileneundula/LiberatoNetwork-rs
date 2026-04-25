@@ -13,9 +13,6 @@
 #[macro_use]
 
 
-pub mod addressing;
-
-
 pub mod usage;
 #[macro_use]
 pub mod networking;
@@ -35,3 +32,5 @@ pub mod muscarinehandler;
 
 /// Slab-of-Data
 pub mod slab;
+
+pub mod identity;

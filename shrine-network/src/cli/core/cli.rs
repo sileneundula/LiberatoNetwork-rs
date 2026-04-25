@@ -15,7 +15,7 @@ use clap::{Args, Parser, Subcommand, ValueEnum};
 type CUSTOM_PROTOCOL_ID = fixedstr::str256;
 
 #[derive(Parser)]
-#[command(name = "oint")]
+#[command(name = "muscarine-network", version, about, long_about = None)]
 #[derive(Debug,Clone,PartialEq,PartialOrd,Hash)]
 pub struct MuscarineCommands {
     #[command(subcommand)]
@@ -69,7 +69,7 @@ pub enum MuscarineActionCommands {
     ol_apps(MuscarineOlApps)
 }
 
-#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash,Subcommand, Args)]
+#[derive(Debug,Clone,Copy,PartialEq,PartialOrd,Hash,Subcommand,Args)]
 pub enum MuscarineSubcommands {
     MuscarineKeys, // muscarine-keys
     MuscarineApps, // muscarine-apps

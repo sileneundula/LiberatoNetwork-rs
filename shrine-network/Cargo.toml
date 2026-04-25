@@ -4,8 +4,12 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-# silene/libslug
-libslug = "0.9.0"
+# silene/libslug and silene/openinternetcryptographykeys
+libslug = "0.11.0"
+openinternetcryptographykeys = "0.2.0"
+
+# silene/liberato-address-scheme
+liberato-address-scheme = "0.1.0"
 
 # libp2p
 libp2p = {version = "0.56.0", features=["full"]}
@@ -53,7 +57,7 @@ async-trait = "0.1.68"
 tonic = "0.14.2"
 
 # Domain
-domain = "0.11.1"
+domain = "0.12.0"
 
 url = "2.5.7"
 
@@ -65,7 +69,3 @@ serde-big-array = "0.5.1"
 
 # UI
 ratatui = "0.30.0"
-
-# /silene/oick
-openinternetcryptographykeys = "0.1.0"
-
