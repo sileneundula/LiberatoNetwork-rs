@@ -1,0 +1,1 @@
+pub mod muscaria_digital_asset;
